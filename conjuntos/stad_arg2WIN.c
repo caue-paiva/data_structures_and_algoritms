@@ -14,7 +14,7 @@ int count_digits(int n){
   return count;
 }
 
-char * int_to_string(uint n, int digi){
+char * int_to_string( unsigned int n, int digi){
     
     char * int_str = (char*) malloc (sizeof(char)* digi+1);
      if (int_str == NULL)
@@ -36,13 +36,13 @@ char * int_to_string(uint n, int digi){
 void new_print(char*str,...){
    
     va_list args;
-    va_start(args, str);
-    uint param;
+     va_start(args, str);
+      unsigned int param;
 
     for (int i = 0; i < strlen(str); i++) {
         if(i!=strlen(str)-1 && str[i]=='%'){
             if(str[i+1]=='u'){
-                param = va_arg(args, uint);
+                param = va_arg(args, unsigned int);
 
                 int digits = count_digits(param);
 
