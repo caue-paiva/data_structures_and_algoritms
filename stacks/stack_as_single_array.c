@@ -5,92 +5,51 @@ This algo solves the problem of the cars in the garage in the chapter 2 of the b
 */
 #include "stdlib.h"
 #include "stdio.h"
-
-#define STACKSIZE 11
-
-int stack[STACKSIZE]={0};
-int stack2[STACKSIZE]={0};
+#include "stack.h"
 
 //top =0 means the stack is empty
-int pop (int *array);
-void push (int *array, int new_item);
-int empty(int *array);
-int stack_top(int *array);
 
 // array with 10 available spaces for the license plates
-int main(){
-char action;
-int plate;
 
-scanf("%c %d", &action, &plate);
+int main(){
+
+   S_elem* stack = create_stack(STACKSIZE);
+   S_elem* stack2 = create_stack(STACKSIZE);
+   char action;
+   S_elem plate;
+
+   scanf("%c %d", &action, &plate);
 
 while(action != 'K' ){
   
   if (action == 'A'){
    //printf("stack top : %d \n", stack[0]);
-   printf("%d", plate);
-   push(stack, plate);
-   printf("car arriving \n");
+      push(stack, plate);
+      printf("car number: %d arriving  \n", plate);
   }
 
   if (action == 'D'){
-   //printf("stack top : %d \n", stack[0]);
-   int popped_plate;
+      //printf("stack top : %d \n", stack[0]);
+      S_elem popped_plate;
+      S_elem cars_out = 0; 
    while((popped_plate = pop(stack)) != plate){
-      printf("another car making way \n ");
-    push(stack2, popped_plate);
+      cars_out++;
+      printf("%d cars have left to make way \n", cars_out);
+      push(stack2, popped_plate);
    }
-   printf("car left garage \n");
-
+      printf("car left garage \n");
+      S_elem NumRetur =0 ;
    while (!empty(stack2)){
-      int returning_car = pop(stack2);
+      S_elem returning_car = pop(stack2);
+      NumRetur++;
       push(stack, returning_car);
-      printf("returning cars to OG place \n");
+      printf("%d cars have returned to OG place \n", NumRetur);
    }
    }
 scanf("%c %d", &action, &plate);
 
 }
 
-
-
-
-
    
 }
 
-
-
-
-int pop (int *array){
-   int top = array[0];
-   if (top <= 0){
-      printf("empty stack");
-      exit(1);
-   }
-   int result = array[top];
-   array[0] = --top;
-   return result;
-
-}
-
-void push (int *array, int new_item){
-   int top =array[0] ;
-   if (top >= (STACKSIZE-1)){
-      printf("stack size overflow");
-      exit(1);
-   }
-   array[top+1]= new_item;
-   array[0] = ++top;
-}
-
-int empty(int *array){
-   if (array[0]==0){
-      return 1;
-   } else {return 0;}
-}
-
-int stack_top(int *array){
-   int top = array[0];
-   return array[top];
-}
