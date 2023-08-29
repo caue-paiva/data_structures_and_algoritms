@@ -9,4 +9,4 @@ stack.o: stack.c stack.h
 	gcc -c stack.c       
 
 clean:
-	rm -f stack_as_single_array.o stack.o stacks
+	rm *.o *.exe 

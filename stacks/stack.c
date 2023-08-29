@@ -4,7 +4,9 @@
 #include "stack.h"
 
 
-
+void free_stack(S_elem **sta){
+     free(*sta);
+}
 //this stack is implemented as a simple array
 
 S_elem pop (S_elem *array){
@@ -29,7 +31,7 @@ void push (S_elem *array, S_elem new_item){
    array[0] = ++top;
 }
 
-S_elem empty(S_elem *array){
+int empty(S_elem *array){
    if (array[0]==0){
       return 1;
    } else {return 0;}
@@ -46,7 +48,7 @@ S_elem stack_top(S_elem *array){
      
 }
 
-S_elem* create_stack(S_elem N){
+S_elem* create_stack(int N){
     S_elem* arr = (S_elem*) calloc(sizeof(S_elem), N+1);
       if(arr==NULL)
         exit(1);
