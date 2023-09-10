@@ -1,17 +1,5 @@
-#include "stdlib.h"
-#include "stdio.h"
-#include "stdbool.h"
-#define N 20
 
-typedef int Q_type; 
-
-typedef struct {
-   int start;
-   int end;
-   int total;
-   Q_type list[N];
-} QUEUE;
-
+#include"queues1.h"
 
 QUEUE* queue_create(void){
        QUEUE* new_q = (QUEUE*) malloc(sizeof(QUEUE));
@@ -20,6 +8,11 @@ QUEUE* queue_create(void){
        new_q->end = 0;
        new_q->total = 0;
        return new_q;
+}
+
+void queue_free(QUEUE** QUE){
+     free(*QUE);
+     *QUE= NULL;
 }
 
 
@@ -48,7 +41,7 @@ Q_type queue_pop(QUEUE*QUE){
        }
 }
 
-Q_type queue_top(QUEUE* QUE){
+Q_type queue_first(QUEUE* QUE){
     if (queue_empty(QUE)){
          printf(" empty queue, nothing here \n");
          exit(1);
@@ -57,16 +50,15 @@ Q_type queue_top(QUEUE* QUE){
 }
 
 bool queue_push(Q_type item, QUEUE* QUE){
-     bool increase_size = true;  //flag to decide wether to increase size , as we wont be increasing size beyond the max capacity of the circular queue
      if(queue_full(QUE)){
-        printf(" queue is full, elements added will overwrite previous elements \n");
-        increase_size = false;
+        printf("queue is full \n");
+        return false;
      } 
       QUE->list[QUE->end] = item;
       QUE->end++;
       QUE->end  = (QUE->end % N);
-      printf("new end: %d", QUE->end);
-      if(increase_size){QUE->total++;}
+      //printf("new end: %d", QUE->end);
+      QUE->total++;
       
       return true;
 }
@@ -86,7 +78,52 @@ void queue_graphic(QUEUE*QUE){
    printf(")\n");
 }
 
-int main(){
+bool queue_clean(QUEUE* QUE){
+  for (int i = 0; i < N; i++){
+      QUE->list[i] = 0;
+  }
+  QUE->total =0;
+  QUE->end = 0;
+  QUE->start =0;
+  return true;
+}
+
+bool queue_copy(QUEUE* QUE, QUEUE*QUE2){
+     if (queue_empty(QUE) && queue_empty(QUE2)){
+      printf("both queues are empty");
+      return false;}
+     
+     
+      
+   
+    QUE->start = 0;
+    QUE->end = QUE2->end; 
+    QUE->total = QUE2->total; 
+
+      for (int i = 0; i < N; i++){
+         QUE->list[i] = QUE2->list[i];
+      }
+    
+
+  /* if (QUE->end >= QUE->start) {
+       
+        for (int i = QUE2->start; i <= QUE2->end; ++i) {
+            QUE->list[i] = QUE2->list[i];
+        }
+    } else {
+        for (int i = 0; i <= QUE2->end; ++i) {
+            QUE->list[i] = QUE2->list[i];
+        }
+        for (int i = QUE2->start; i < N; ++i) {
+            QUE->list[i] = QUE2->list[i];
+        }
+    } */ 
+    
+    return true;
+}
+
+
+/*int main(){
 
 int plate;
 char action;
@@ -117,4 +154,4 @@ scanf("%c",&action);
 
 queue_graphic(pQUE);
 
-}
+}*/
