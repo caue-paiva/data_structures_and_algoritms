@@ -5,20 +5,22 @@
 #define INISIZE 20  
 
 
-typedef struct {  //this is the struct of the generic stack, it has a memsize paramter to keep track of allocated memory available
+struct stac {  //this is the struct of the generic stack, it has a memsize paramter to keep track of allocated memory available
    void** arrV;
    int top;
    int MemSize;
-} sta;
+};
 
+typedef struct stac sta;
 
 typedef enum {
     INT, FLOAT, STRING, CHAR 
 } Type;
 
 typedef struct {   //the element struct and type enum are used to create generic types to be used on the stack...
-    Type type;     //this allows for an easier manipulation of stack data such as easier printing/popping
+             //this allows for an easier manipulation of stack data such as easier printing/popping
     void* data;
+    Type type; 
 } Element;
 
 
@@ -142,11 +144,13 @@ void* check_top(sta*stac1){
 int main(){
 
 int X =5, Y=3;
+int* pX=&X;
+int* pY=&Y;
 char c= 'c';
 float F = 4.6;
 
-Element  XE = {&X,INT};
-Element YE ={&Y,INT};
+Element  XE = {pX,INT};
+Element YE ={pY,INT};
 
 Element CE = {&c,CHAR};
 

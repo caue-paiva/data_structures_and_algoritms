@@ -3,6 +3,8 @@
     #include <stdlib.h>
     #include <stdio.h>
     #include <stdarg.h>
+    typedef struct stac sta;
+
 
 
     sta* create_stac(int argNum,...);

@@ -72,8 +72,8 @@ set* set_uni(int Scount, ...){
         printf("not possible to do this operation with less than 2 sets");
         return NULL;
     }
-    char str[]= "";
-    printf(str);
+   // char str[]= "";
+   // printf(str);
     va_list args;
     va_start(args, Scount);
 
@@ -148,7 +148,7 @@ set_remove(s1,arr3,sizeof(arr3)/sizeof(int));
 set_print(s1);
 //set_print(s2);
 
-//set_print(s3);
+set_print(s3);
 
 //set_remove
 
