@@ -6,101 +6,119 @@
 
 int main(){
 
-    int n_linhas, m_colunas;
-    scanf("%d %d", &n_linhas, &m_colunas);
-    int matriz[n_linhas][m_colunas];
+    int N_LIN, M_COL;
+    scanf("%d %d", &N_LIN, &M_COL);
+    int MA[N_LIN][M_COL];
 
     PILHA *p = pilha_criar();
 
-    for(int i=0;i<n_linhas;i++){
-        for(int j =0;j<m_colunas;j++){
-            scanf("%d", &matriz[i][j]);
+    for(int i=0;i<N_LIN;i++){
+        for(int j =0;j<M_COL;j++){
+            scanf("%d", &MA[i][j]);
         }
     }
 
-    // Toda vez que eu desempilhar um elemento eu tenho que printá-lo7
 
-    ITEM *itemx = item_criar(0);
-    ITEM *itemy = item_criar(0);
+    ITEM *ITEM_X = item_criar(0);
+    ITEM *ITEM_Y = item_criar(0);
 
-    // EMPILHAR X E DEPOIS Y. DESEMPILHAR Y E DEPOIS X
+    bool achouSaida = false;
+    bool devePrintar = true;
 
+    while(MA[item_get_chave(ITEM_X)][item_get_chave(ITEM_Y)] != 2){
 
-    // Só falta colocar o zero agora
+        // if (MA[item_get_chave(ITEM_X)][item_get_chave(ITEM_Y)] == 2) {
+        //   achouSaida = true;
+        //   devePrintar = false;
+        //   printf("(%d,%d)\n", item_get_chave(ITEM_X), item_get_chave(ITEM_Y));
+        //   break; 
+        // }
 
-    while(matriz[item_get_chave(itemx)][item_get_chave(itemy)] != 2){
-       // printf("Antes dos if");
+        if (MA[item_get_chave(ITEM_X)][item_get_chave(ITEM_Y)] == 2) {
+         achouSaida = true;
+         break; 
+        }
 
-        // TÁ DANDO PROBLEMA NO IF
-        if(((item_get_chave(itemx))+1 != n_linhas) && (matriz[item_get_chave(itemx)+1][item_get_chave(itemy)] != 0)){
-            ITEM *tmpx, *tmpy;
-            tmpx = item_criar(item_get_chave(itemx) + 1);
-            tmpy = item_criar(item_get_chave(itemy));
-            pilha_empilhar(p,tmpx);
-            pilha_empilhar(p,tmpy);
-           // printf("Foi pra baixo");
+       
+        if(((item_get_chave(ITEM_X))+1 != N_LIN) && (MA[item_get_chave(ITEM_X)+1][item_get_chave(ITEM_Y)] != 0)){            
+                ITEM *TEMPx;
+                ITEM *TEMPy;
+            
+                TEMPx = item_criar(item_get_chave(ITEM_X) + 1);
+                TEMPy = item_criar(item_get_chave(ITEM_Y));
+            
+                pilha_empilhar(p,TEMPx);
+                pilha_empilhar(p,TEMPy);
+          
         }
             
         
-        if((item_get_chave(itemy)>0) && (matriz[item_get_chave(itemx)][item_get_chave(itemy)-1] != 0)){
-                ITEM *tmpx, *tmpy;
-                tmpx = item_criar(item_get_chave(itemx));
-                tmpy = item_criar(item_get_chave(itemy)-1);
-                pilha_empilhar(p,tmpx);
-                pilha_empilhar(p,tmpy);
+        if((item_get_chave(ITEM_Y)>0) && (MA[item_get_chave(ITEM_X)][item_get_chave(ITEM_Y)-1] != 0)){
+                ITEM *TEMPx;
+                ITEM *TEMPy;               
+                
+                TEMPx = item_criar(item_get_chave(ITEM_X));
+                TEMPy = item_criar(item_get_chave(ITEM_Y)-1);
+                
+                pilha_empilhar(p,TEMPx);
+                pilha_empilhar(p,TEMPy);
         }
 
 
-        if((item_get_chave(itemx)>0) && (matriz[item_get_chave(itemx)-1][item_get_chave(itemy)] != 0)){
-            ITEM *tmpx, *tmpy;
-            tmpx = item_criar(item_get_chave(itemx) - 1);
-            tmpy = item_criar(item_get_chave(itemy));
-            pilha_empilhar(p,tmpx);
-            pilha_empilhar(p,tmpy);
+        if((item_get_chave(ITEM_X)>0) && (MA[item_get_chave(ITEM_X)-1][item_get_chave(ITEM_Y)] != 0)){
+            ITEM *TEMPx;
+            ITEM *TEMPy;
+            TEMPx = item_criar(item_get_chave(ITEM_X) - 1);
+            TEMPy = item_criar(item_get_chave(ITEM_Y));
+            pilha_empilhar(p,TEMPx);
+            pilha_empilhar(p,TEMPy);
 
         }
 
-        if((item_get_chave(itemy)+1 != m_colunas) && (matriz[item_get_chave(itemx)][item_get_chave(itemy)+1] != 0)){
-                ITEM *tempx, *tempy;
+        if((item_get_chave(ITEM_Y)+1 != M_COL) && (MA[item_get_chave(ITEM_X)][item_get_chave(ITEM_Y)+1] != 0)){
+                ITEM *TEMPx, *TEMPy;
                 
-                tempx = item_criar(item_get_chave(itemx));
+                TEMPx = item_criar(item_get_chave(ITEM_X));
                 
-                tempy = item_criar(item_get_chave(itemy)+1);
+                TEMPy = item_criar(item_get_chave(ITEM_Y)+1);
+
+                
+                pilha_empilhar(p,TEMPx);
+                pilha_empilhar(p,TEMPy);
                
-              //  printf("Pilha topo(y): %d\n", item_get_chave(pilha_topo(p)));
-                
-                pilha_empilhar(p,tempx);
-                pilha_empilhar(p,tempy);
-               
-              //  printf("Pilha topo(y): %d\n", item_get_chave(pilha_topo(p)));
 
             }
 
-      //  printf("Não empilhou nada");
+    
+        MA[item_get_chave(ITEM_X)][item_get_chave(ITEM_Y)] = 0;
 
-        matriz[item_get_chave(itemx)][item_get_chave(itemy)] = 0;
-
-        if(pilha_vazia(p)){
-            printf("Caminho não encontrado");
+        
+       
+       
+          if(pilha_vazia(p)){
+            printf("Saída não encontrada.");
+            devePrintar  = false;
+            //printf("(%d, %d)\n", item_get_chave(ITEM_X), item_get_chave(ITEM_Y));
             break;
         }
 
-        itemy = pilha_desempilhar(p);   
         
-        itemx = pilha_desempilhar(p);
-
-        printf("(%d,%d)\n", item_get_chave(itemx), item_get_chave(itemy));  // (x,y)
-
+         printf("(%d, %d)\n", item_get_chave(ITEM_X), item_get_chave(ITEM_Y));
 
       
 
-        for(int i=0;i<n_linhas;i++){
-            printf("\n");
-        for(int j =0;j<m_colunas;j++){
-      //  printf("%d", matriz[i][j]);
-        }
-    }        
+
+        ITEM_Y = pilha_desempilhar(p);          
+        ITEM_X = pilha_desempilhar(p);
+
+        
+        
+          
     }   
+    if(devePrintar){
+        printf("(%d, %d)\n", item_get_chave(ITEM_X), item_get_chave(ITEM_Y));
+    }
+    
 
      return 0;
 }
