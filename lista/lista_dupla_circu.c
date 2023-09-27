@@ -138,8 +138,8 @@ void lista_apagar(lista**lista){
         free(*lista);
         *lista = NULL;   
         return;
-    
     }
+
      NO* aux;
      NO* aux2;
      aux = (*lista)->comeco;
@@ -154,23 +154,23 @@ void lista_apagar(lista**lista){
      *lista = NULL;
 }
 
-int main(){
+int main(){ ///teste git
 
-lista* F1 = lista_criar();
+    lista* F1 = lista_criar();
 
-lista_adicionar(3,F1);
-lista_adicionar(6,F1);
-lista_adicionar(7,F1);
-lista_adicionar(8,F1);
+    lista_adicionar(3,F1);
+    lista_adicionar(6,F1);
+    lista_adicionar(7,F1);
+    lista_adicionar(8,F1);
 
-lista_printar_come(F1);
+    lista_printar_come(F1);
 
-lista_remover(8, F1);
-lista_remover(3, F1);
-printf("\n");
-lista_printar_fim(F1);
+    lista_remover(8, F1);
+    lista_remover(3, F1);
+    printf("\n");
+    lista_printar_fim(F1);
 
 
-lista_apagar(&F1);
+    lista_apagar(&F1);
 
 }
