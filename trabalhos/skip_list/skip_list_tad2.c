@@ -101,6 +101,60 @@ NOSKIP * procura_lista2(int procurado, int nivel, NOSKIP *no) {// nivel é chama
     }
 }
 
+void remove_lista_skip(int procurado, int nivel, NOSKIP *no) {// nivel é chamada com 4, no começo como NULL
+    if(no->prox_dir != NULL){
+    if(no->prox_dir->item != NULL){
+    if(item_get_chave(no->prox_dir->item)==procurado){
+        NOSKIP* toDelete=no->prox_dir;
+        no->prox_dir=no->prox_dir->prox_dir;
+        if(nivel==1){
+            item_apagar(&toDelete->item);
+        }
+        free(toDelete);
+        if(nivel!=1){
+            remove_lista_skip(procurado, nivel-1, no->prox_baixo);
+        }
+    }
+    }
+    }
+   
+    if(no->prox_dir==NULL && no->prox_baixo==NULL){//nao existe o procurado
+        return;
+    }
+
+    if(no->prox_dir==NULL){
+        remove_lista_skip(procurado, nivel-1, no->prox_baixo);
+        return;
+    }
+
+    if(no->prox_baixo==NULL ){
+       if(item_get_chave(no->prox_dir->item) < procurado){
+        remove_lista_skip(procurado, nivel, no->prox_dir);
+        return;
+       }
+    }
+
+    if(no->prox_baixo==NULL ){
+       if(item_get_chave(no->prox_dir->item) > procurado){
+        return;
+       }
+    }
+    
+    if(no->prox_dir != NULL){
+    if(no->prox_dir-> item != NULL){
+    if(item_get_chave(no->prox_dir->item)>procurado){
+        remove_lista_skip(procurado, nivel-1, no->prox_baixo);
+        return;
+    }
+    if(item_get_chave(no->prox_dir->item)<procurado){
+        remove_lista_skip(procurado, nivel, no->prox_dir);
+        return;
+    }
+    }
+    }
+    
+}
+
 /*int primeiro_char(NOSKIP* NO, char ca){
     ITEM* item = NO->item;
     char* str = item_get_chave(item);
@@ -142,6 +196,7 @@ NOSKIP * procura_lista2(int procurado, int nivel, NOSKIP *no) {// nivel é chama
     }
   
 }*/
+
 
 
 NOSKIP * insercao(int inserir, int nivel, NOSKIP *no) {
@@ -237,19 +292,34 @@ int main(){
 
     insercao(5,NIVEIS,L1->niveis);
     insercao(6,NIVEIS,L1->niveis);
+    insercao(1,NIVEIS,L1->niveis);
+    insercao(2,NIVEIS,L1->niveis);
+    insercao(8,NIVEIS,L1->niveis);
 
-   NOSKIP* NO2 = procura_lista2(5,NIVEIS,L1->niveis);
+
+      do {
+         //printf("%d", val);
+         printar_nivel(NO1);
+         NO1 = NO1->prox_baixo; 
+
+     } while (NO1 != NULL);
+
    //NOSKIP* NO3 = procura_lista2(6,NIVEIS,L1->niveis);
-   int val1 = item_get_chave(NO2->item);
+  printf("\n\n\n");
   // int val2 = item_get_chave(NO3->item);
   // printf("%d \n", val1);
 
-    do {
-        //printf("%d", val);
-        printar_nivel(NO1);
-        NO1 = NO1->prox_baixo; 
+  remove_lista_skip(5,NIVEIS,L1->niveis);
+  //NOSKIP* NO2 = procura_lista2(6,NIVEIS,L1->niveis);
+  //int val1 = item_get_chave(NO2->item);
+   //printf("%d \n", val1);
+     NOSKIP* NO2 = L1->niveis;
+     do {
+         //printf("%d", val);
+         printar_nivel(NO2);
+         NO2 = NO2->prox_baixo; 
 
-    } while (NO1 != NULL);
+     } while (NO2 != NULL);
 
 
 }
