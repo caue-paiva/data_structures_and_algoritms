@@ -310,6 +310,11 @@ int main(){
   // printf("%d \n", val1);
 
   remove_lista_skip(5,NIVEIS,L1->niveis);
+  remove_lista_skip(1,NIVEIS,L1->niveis);
+  remove_lista_skip(8,NIVEIS,L1->niveis);
+  remove_lista_skip(2,NIVEIS,L1->niveis);
+  
+  
   //NOSKIP* NO2 = procura_lista2(6,NIVEIS,L1->niveis);
   //int val1 = item_get_chave(NO2->item);
    //printf("%d \n", val1);
