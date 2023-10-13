@@ -92,10 +92,6 @@ int main(){
 
    }
 
-      free(comando);
-      free(palavra);
-      free(defini);
-      free(strbackup);
 
 } 
    

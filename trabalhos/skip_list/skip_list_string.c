@@ -163,7 +163,7 @@ int primeiro_char(NOSKIP* NO, char ca){  //compara o primeiro char do conteudo d
 void busca(char* procurado, int nivel, NOSKIP *no){  /*adicionar um printf na função de busca quebra a função e sua lógica de recursão, então foi criada uma wrapper function de busca*/
     NOSKIP* NO1 = procura_lista2(procurado,nivel,no);
     if(NO1 != NULL){ //se o NO1 for nullo printa invalido, senão printa a palavra
-      printf("%s  %s\n", item_get_chave(NO1->item), item_get_defi(NO1->item));
+      printf("%s %s\n", item_get_chave(NO1->item), item_get_defi(NO1->item));
     }else {
         printf("OPERACAO INVALIDA\n");
     }
@@ -180,7 +180,7 @@ void imprime_todas_palavras(char letra, NOSKIP* no){ //imprimir todas palavras q
    while(aux != NULL){
       
        if(primeiro_char(aux, letra) == 1){ //palavra que começa com o char, printa
-         printf("%s  %s\n", item_get_chave(aux->item), item_get_defi(aux->item));
+         printf("%s %s\n", item_get_chave(aux->item), item_get_defi(aux->item));
          flag = 1 ;
          } else if (primeiro_char(aux,letra) == 0){ // 0 significa que o primeiro char dessa palavra é maior que o char buscado, então não vai mais avançar
          if (!flag){ //se nenhuma palavra foi printada até agora ele printa a msg 
