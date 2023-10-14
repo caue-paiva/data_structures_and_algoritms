@@ -23,7 +23,7 @@ bool queue_empty(QUEUE*QUE){
 }
 
 bool queue_full(QUEUE*QUE){
-   if (QUE->total==N){
+   if (QUE->start == QUE->end && QUE->total != 0){
       return true;
    }else{ return false; }
 }
@@ -86,6 +86,28 @@ bool queue_clean(QUEUE* QUE){
   QUE->end = 0;
   QUE->start =0;
   return true;
+}
+
+bool queue_compare(QUEUE* QUE1, QUEUE* QUE2){
+     int size1,size2;
+     if(QUE1->end > QUE1->start){
+      size1 = QUE1->end - QUE1->start
+     } else if(QUE1->end == QUE1->start ){
+        size1 = N;
+     } else{
+       size1 = (QUE1->end + (N-QUE1->start) +1);
+     }
+
+
+      if(QUE2->end > QUE2->start){
+      size2 = QUE2->end - QUE2->start
+     } else if(QUE2->end == QUE2->start ){
+        size2 = N;
+     } else{
+       size2 = (QUE2->end + (N-QUE2->start) +1);
+     }
+
+     return (size1 == size2);
 }
 
 bool queue_copy(QUEUE* QUE, QUEUE*QUE2){
