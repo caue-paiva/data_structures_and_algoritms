@@ -85,10 +85,10 @@ char pop(stack* pS){
 }
 
 void push (stack* pS, char new_item){
-   char temp_top = pS->top;
+   int temp_top = pS->top;
    if (temp_top >= (stack_size-1)){
    printf("not enought space on array");
-   exit(1);
+   return;
    }
    pS->top++;
    pS->items[pS->top] = new_item;
