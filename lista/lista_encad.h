@@ -4,6 +4,7 @@
  #include "stdlib.h"
  typedef struct no NO_;
  typedef struct lista_ LISTA;
+ 
  enum Position {
    COMECO=1,
    FIM =0
