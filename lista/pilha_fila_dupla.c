@@ -13,7 +13,7 @@ struct no{
 
 
 typedef struct{
-    NO*  senti;
+    NO*  fim;
     NO* comeco;
     int tam;
 } lista;
@@ -23,9 +23,8 @@ lista* lista_criar(){
     if (F1==NULL){exit(1);}
     
     F1->tam = 0;
-    
+    F1->fim =NULL;
     F1->comeco =NULL;
-    F1->senti=NULL;
     return F1;
 }
 
@@ -45,19 +44,14 @@ bool lista_adicionar(F_type item, lista* lista){
     NO* novo_no = no_criar(item);
 
     if(lista->tam == 0){
-        //printf("primeiro item\n"); 
+        //printf("primeiro item\n");
+        lista->fim = novo_no;
         lista->comeco = novo_no;
-        lista->senti = novo_no;
-        lista->comeco->ante = lista->senti;
-        lista->senti->prox = lista->comeco;
     } else{
        // printf("item não primeiro \n");
-        lista->senti->prox = novo_no;
-        novo_no->ante = lista->senti;
-        lista->senti = novo_no;
-        lista->senti->prox = lista->comeco;
-        lista->comeco->ante =  lista->senti;
-
+        lista->fim->prox = novo_no;
+        novo_no->ante = lista->fim;
+        lista->fim = novo_no;
     }
     ++(lista->tam);
     return true;
@@ -67,14 +61,13 @@ void lista_printar_come(lista* lista){
      if (lista->tam == 0){return;}
      NO* aux;
      aux = lista->comeco;
-     //printf("primeiro valor %d \n", aux->item);     
-     do {
+     //printf("primeiro valor %d \n", aux->item);
+     do{
         F_type item = (aux->item);
         printf("%d \n", item);
        // printf("%d\n", lista->tam);
         aux = aux->prox;
-     } while(aux !=lista->comeco);
-     
+     }while(aux!= NULL);
 }
 
 bool lista_remover(F_type item, lista* lista){
@@ -90,20 +83,18 @@ bool lista_remover(F_type item, lista* lista){
             NO* aux_ante = aux->ante;
             NO* aux_prox = aux->prox;
            
-            if(aux->prox != lista->comeco){
+            if(aux->prox != NULL){
               aux->prox->ante = aux_ante;
             } else{
-              aux_ante->prox= lista->comeco;
-              lista->senti = aux_ante;
-              lista->senti->prox = lista->comeco;
+              aux_ante->prox=NULL;
+              lista->fim = aux_ante;
             }
 
-            if (aux->ante != lista->senti){
+            if (aux->ante != NULL){
                aux_ante->prox = aux->prox;
             }else{
-                aux->prox->ante = lista->senti;
+                aux->prox->ante = NULL;
                 lista->comeco = aux->prox;
-                lista->comeco->ante = lista->senti;
             }
               
             free(aux);
@@ -118,57 +109,101 @@ bool lista_remover(F_type item, lista* lista){
 void lista_printar_fim(lista* lista){
      if (lista->tam == 0){return;}
      NO* aux;
-     aux = lista->senti;
-     bool prim_iter = true;
+     aux = lista->fim;
      //printf("primeiro valor %d \n", aux->item);
-    
      do{
         F_type item = (aux->item);
-         printf("%d \n", item);
-         //printf("%d\n", lista->tam);
-         aux = aux->ante;
-     }while(aux != lista->senti);
-    
+        printf("%d \n", item);
+       // printf("%d\n", lista->tam);
+        aux = aux->ante;
+     }while(aux!= NULL);
 }
 
 void lista_apagar(lista**lista){
-    if ((*lista)->tam == 0){
-        free(*lista);
-        *lista = NULL;   
-        return;
-    }
-
+    if ((*lista)->tam == 0){return;}
      NO* aux;
      NO* aux2;
      aux = (*lista)->comeco;
      aux2 = aux->prox;
-     do{
-        free(aux);
+     free(aux);
+
+     while(aux2){
         aux = aux2;
         aux2 = aux2->prox;
-     }while(aux2 != (*lista)->comeco);
+        free(aux);
+     }
+   //   do{
+   //      aux = aux2;
+   //      aux2 = aux2->prox;
+   //   }while(aux2!= NULL);
     
      free(*lista);
      *lista = NULL;
 }
 
-int main(){ ///teste git
+void fp_adiciona(lista* lista, F_type item){
+   if(!lista){exit(1);}
+   NO* novo_no = no_criar(item);
 
-    lista* F1 = lista_criar();
+   if(lista->tam == 0){
+      lista->comeco = novo_no;
+      lista->fim = novo_no;     
+   }
 
-    lista_adicionar(3,F1);
-    lista_adicionar(6,F1);
-    lista_adicionar(7,F1);
-    lista_adicionar(8,F1);
+   lista->fim->prox = novo_no;
+   novo_no->ante = lista->fim;
+   lista->fim = novo_no;
+   lista->tam++;
+}
 
-    lista_printar_come(F1);
+F_type pilha_pop(lista* lista){
+       NO* final = lista->fim;
+       F_type item = final->item;
+       lista->fim = lista->fim->ante;
+       free(final);
+       if(lista->fim)
+         lista->fim->prox = NULL;
+       lista->tam--;
+       return item;
+}
 
-    lista_remover(8, F1);
-    lista_remover(3, F1);
-    printf("\n");
-    lista_printar_fim(F1);
+F_type fila_pop(lista* lista){
+       if(lista->tam == 0){exit(1);}
+
+       NO* come = lista->comeco;
+       F_type item = come->item;
+       lista->comeco = lista->comeco->prox;
+       if(lista->comeco)
+          lista->comeco->ante = NULL;
+       free(come);
+       lista->tam--;
+       return item;
+}
 
 
-    lista_apagar(&F1);
+int main(){
+
+lista* L1 = lista_criar();
+lista* L2 = lista_criar();
+
+fp_adiciona(L1,2);
+fp_adiciona(L1,3);
+fp_adiciona(L1,5);
+fp_adiciona(L1,7);
+
+fp_adiciona(L2,2);
+fp_adiciona(L2,3);
+fp_adiciona(L2,5);
+fp_adiciona(L2,7);
+
+for (int i = 0; i < 4; i++)
+{
+  printf("versao fila %d ",fila_pop(L1));
+}
+printf("\n\n");
+for (int i = 0; i < 4; i++)
+{
+  printf("versao pilha %d ", pilha_pop(L2));
+}
 
 }
