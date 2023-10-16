@@ -32,5 +32,5 @@ bool stack_push(QUEUE*QUE, Q_type item);
 Q_type stack_top(QUEUE* QUE);
 Q_type stack_pop(QUEUE*QUE);
 bool stack_empty(QUEUE*QUE);
-
+void queue_print(QUEUE** QUE);
 #endif

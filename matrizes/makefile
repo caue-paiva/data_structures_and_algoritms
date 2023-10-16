@@ -1,7 +1,7 @@
 all: princi.o matrizes.o
 	gcc -o princi.exe princi.o matrizes.o
 
-princi.o: matrizes.o
+princi.o: princi.c
 	gcc -c princi.c
 
 matrizes.o: matrizes.c

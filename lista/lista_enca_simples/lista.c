@@ -76,6 +76,7 @@ void lista_imprimir(lista_* lista){
 }
 
 bool lista_apagar(lista_ **lista){
+    if(!(lista)|| !(*lista)){return false;}
     if ((*lista)->tam == 0){
         free(*lista);
         *lista = NULL;
@@ -133,9 +134,7 @@ ITEM* lista_remover(lista_* lista, int chave){
               --(lista->tam);
               free(aux_atual);
               return aux_item;
-              
-            }
-              
+            }            
         }
         aux_ante = aux_atual;
         aux_atual = aux_atual->prox;
@@ -169,6 +168,28 @@ int lista_tamanho(lista_* lista){
 bool lista_vazia(lista_* lista){
      if (lista==NULL){return NULL;}
      return (lista->tam == 0);
+}
+
+bool lista_inverter2(lista_* lista){
+    if(lista->tam < 2){return false;}
+    NO* aux =lista->comeco;
+    NO* prox= aux->prox;
+    NO* ante=NULL;
+
+    do
+    {
+      ante = aux;
+      aux = prox;
+      prox = prox->prox;
+      aux->prox = ante;  
+    } while (prox);
+
+    NO* temp = lista->fim;
+    lista->fim =  lista->comeco;
+    lista->comeco = temp;
+    lista->fim->prox =NULL;
+    
+    return true;
 }
 
 bool lista_inverter (lista_ ** lista){
@@ -216,7 +237,7 @@ I4 = lista_busca(F1,7);
 
 lista_imprimir(F1);
 
-lista_inverter(&F1);
+lista_inverter2(F1);
 printf("\n\n");
 lista_imprimir(F1);
 lista_apagar(&F1);

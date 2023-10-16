@@ -19,37 +19,51 @@ int stack_size(stack*pS);
 stack* create_stack(void);
 int compara_tam_pilhas(stack* S1, stack* S2);
 int compara_pilhas(stack* S1, stack* S2);
-
+void transforma_bin(int num, stack*sta);
 
 int main(){
 
-stack* S1 =create_stack();
-stack* S2 =create_stack();
+   stack* S1 =create_stack();
+   stack* S2 =create_stack();
+   stack* S3 = create_stack();
+   push(S1,3);
+   push(S1,4);
+   push(S1,5);
+   push(S1,6);
 
-push(S1,3);
-push(S1,4);
-push(S1,5);
-push(S1,6);
+   push(S2,3);
+   push(S2,4);
+   push(S2,5);
+   push(S2,6);
+   //print_stack(S1);
 
-push(S2,3);
-push(S2,4);
-push(S2,5);
-push(S2,6);
-//print_stack(S1);
+   //inverte_stack(&S1);
+   printf("\n\n");
+   //printa_stack(S1);
+   //printa_stack(S2);
+   transforma_bin(7,S3);
+   if (compara_pilhas(S1,S2)){
+      //printf("iguais \n");
+   }
 
-inverte_stack(&S1);
-printf("\n\n");
-printa_stack(S1);
-printa_stack(S2);
 
-if (compara_pilhas(S1,S2)){
-   printf("iguais \n");
+
+
+
 }
 
+void transforma_bin(int num, stack*sta){
+  // int result = 1;
+   int mod;
+   while(num !=0){
+      mod = num%2;
+      num = num/2;
+      push(sta,mod);
+   }
 
-
-
-
+   while(!empty_stack(sta)){
+      printf(" %d ",pop(sta));
+   }
 }
 
 void inverte_stack(stack**pS){

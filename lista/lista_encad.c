@@ -4,8 +4,6 @@
 #define N 100
 typedef struct no NO;
 
-
-
 struct no {
     NO* prox;
     int item;
@@ -16,6 +14,7 @@ struct lista_ {
    NO* fim;
    int tam;
 };
+
 typedef struct lista_ lista;
 
 NO* no_criar(int item){
@@ -29,19 +28,16 @@ NO* no_criar(int item){
 
 lista* lista_criar(void){
     lista* lista_nova = (lista*) malloc(sizeof(lista));
-        if(!lista_nova){exit(1);}
-      
+        if(!lista_nova){exit(1);}     
     lista_nova->comeco =NULL;
     lista_nova->fim =NULL;
     lista_nova->tam = 0;
-
-    return lista_nova;
-   
+    return lista_nova;  
 }
 
 int lista_adicionar(lista* lista, int item, enum Position posicao){
-   if(!lista){return 0;}
-   NO* novo_no = no_criar(item);
+ if(!lista){return 0;}
+ NO* novo_no = no_criar(item);
  
  if(posicao == FIM){
    if(!lista->comeco){
@@ -111,7 +107,6 @@ int lista_remover(lista* lista, int item){
        }
     }
     return 1;
-
 }
 
 void lista_printa(lista*lista){
@@ -147,7 +142,6 @@ void printa_posicaoes(lista* l1, lista* l2){
 NO* lista_comeco(lista* l1){
    return (l1->comeco);
 }
-
 
 int no_valor(NO* no){
    return (no->item);
@@ -209,10 +203,10 @@ lista* intersec(lista* L1, lista* L2){
 lista* merge2(lista* L1, lista* L2){
      if(!(L1 && L2)){exit(1);}
      int conta_merge = 0;
-      NO* aux1;
-      NO* aux2;
-      NO* comecoMaior;
-      int item_atual, item_escolhido;
+     NO* aux1;
+     NO* aux2;
+     NO* comecoMaior;
+     int item_atual, item_escolhido;
      lista* nova_lista = lista_criar();
      if(L1->tam < L2->tam){
           aux1 = L1->comeco;  //aux 1 é o menor
@@ -283,7 +277,6 @@ lista* merge2(lista* L1, lista* L2){
           nova_lista->fim->prox = NULL;
           nova_lista->tam = (L1->tam) + (L2->tam);
           return nova_lista;
-
 }
       
 lista* merge(lista* L1, lista* L2){
@@ -389,7 +382,7 @@ lista* intercala_listas(lista* L1, lista* L2){
       NO* aux1 = L1->comeco;
       NO* aux2 = L2->comeco;
       NO* aux3= NULL;
-     // nova_lista->comeco = aux1;
+      //nova_lista->comeco = aux1;
       int flag = 0; 
       while(aux1 || aux2){
          if(!flag && aux1){
@@ -416,10 +409,11 @@ lista* intercala_listas(lista* L1, lista* L2){
       nova_lista-> tam = (L1->tam + L2->tam);
       return nova_lista;
 }
+
 int main(){
    //printf("teste");
    lista* L1 = lista_criar();
-   lista*L2 = lista_criar();
+   lista* L2 = lista_criar();
 
    lista_adicionar(L1,3,FIM);
    lista_adicionar(L1,5,FIM);
@@ -429,20 +423,15 @@ int main(){
    lista_adicionar(L2,5,COMECO);
    lista_adicionar(L2,3,COMECO);
   
- 
-
    printf(" %d ", iguais_recu(L1,L2));
    
-
-
-
    //lista_printa(L1);
    //lista_adicionar(L1,2,COMECO);
    //lista_adicionar(L1,2,FIM);
-  // lista_printa(L2);
-  // lista* L3 = merge2(L1,L2);
-  // printf("%p",L3->fim);
-  // lista_printa(L3);
+   //lista_printa(L2);
+   //lista* L3 = merge2(L1,L2);
+   //printf("%p",L3->fim);
+   //lista_printa(L3);
    //printa_posicaoes(L1,L2);
    //printf("%d \n",lista_procurar(L1,2));
    //lista_remover(L1,2);

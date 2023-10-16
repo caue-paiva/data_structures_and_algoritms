@@ -78,6 +78,18 @@ void queue_graphic(QUEUE*QUE){
    printf(")\n");
 }
 
+void queue_print(QUEUE** QUE){
+   QUEUE*   q1 = queue_create();
+
+   while(!queue_empty(*QUE)){
+      Q_type item =  queue_pop(*QUE);
+      printf("%d ",item);
+      queue_push(item,q1);
+   }
+   printf("\n");
+   *QUE = q1;
+}
+
 bool queue_clean(QUEUE* QUE){
   for (int i = 0; i < N; i++){
       QUE->list[i] = 0;
@@ -91,8 +103,8 @@ bool queue_clean(QUEUE* QUE){
 bool queue_compare(QUEUE* QUE1, QUEUE* QUE2){
      int size1,size2;
      if(QUE1->end > QUE1->start){
-      size1 = QUE1->end - QUE1->start
-     } else if(QUE1->end == QUE1->start ){
+      size1 = QUE1->end - QUE1->start;
+     } else if(QUE1->end == QUE1->start){
         size1 = N;
      } else{
        size1 = (QUE1->end + (N-QUE1->start) +1);
@@ -100,7 +112,7 @@ bool queue_compare(QUEUE* QUE1, QUEUE* QUE2){
 
 
       if(QUE2->end > QUE2->start){
-      size2 = QUE2->end - QUE2->start
+      size2 = QUE2->end - QUE2->start;
      } else if(QUE2->end == QUE2->start ){
         size2 = N;
      } else{

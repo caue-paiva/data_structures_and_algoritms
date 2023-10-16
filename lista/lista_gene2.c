@@ -30,9 +30,10 @@ NO* listagene_criar(){
 
    novo_no ->prox = NULL;
    novo_no->tipo = VOIDLIST;
- 
+   novo_no->compo.atomo =NULL;
+   novo_no->compo.sublista =NULL;
 
-  return  novo_no;
+   return  novo_no;
     
 }
 
@@ -43,8 +44,8 @@ NO* No_criar(void* item, enum tipo_lista tipo ){
     switch (tipo)
     {
     case INT:
-        novo_no->compo.atomo = malloc(sizeof(int));
-        if (novo_no->compo.atomo == NULL) { exit(1); }
+        //novo_no->compo.atomo =  malloc(sizeof(int));
+        //if (novo_no->compo.atomo == NULL) { exit(1); }
         novo_no->compo.atomo = item;
         novo_no->tipo= INT;
         novo_no->prox = NULL;
@@ -76,16 +77,56 @@ NO* No_criar(void* item, enum tipo_lista tipo ){
 //       novo_no->compo
 // }
 
-int listagene_adicionar(void*  item, enum tipo_lista tipo, NO* list){  //funcao generica que add atomos e sublistas 
-  
+int lista_gen_remover(void*item , enum tipo_lista tipo, NO**list){
+  NO* aux = *list;
+  if(!aux){return 0;}
+  NO* ante =NULL;
+  while(aux){
+    enum tipo_lista tipagem = aux->tipo;
+    switch (tipagem)
+    {
+    case LIST:
+        if((void*) aux->compo.sublista  == (void*) item){
+           NO* temp = aux;
+           if(!ante){
+              *list = (*list)->prox;
+           }else{
+            ante->prox = aux->prox;
+           }                  
+           free(temp);
+           break;
+        }else{ lista_gen_remover(item,tipo,&aux->compo.sublista);}
+        break;     
+    default:
+      if(tipagem == tipo){
+        if(aux->compo.atomo == item){
+             NO* temp = aux;
+          if(!ante){
+              *list = (*list)->prox;
+           }else{
+              ante->prox = aux->prox;
+           }   
+           free(temp);
+         }
+         break; 
+      }
+    } 
+    ante = aux;
+    aux = aux->prox;
+  }
+
+  return 1;
+}
+
+int listagene_adicionar(void*  item, enum tipo_lista tipo, NO** list){  //funcao generica que add atomos e sublistas 
     NO* novo_no = No_criar(item,  tipo);
         if (novo_no ==NULL){exit(1);}
-    if (list->tipo == VOIDLIST){
+    if ((*list)->tipo == VOIDLIST){
         novo_no->tipo = tipo;
-        (*list) = (*novo_no);
-    } else{
-     
-        NO* aux = list;
+        free(*list);
+        *list = novo_no;
+    } else{    
+        NO* aux = *list;
         while(aux->prox != NULL){ aux = aux->prox;}  
         aux->prox = novo_no; 
     }
@@ -93,7 +134,6 @@ int listagene_adicionar(void*  item, enum tipo_lista tipo, NO* list){  //funcao 
     return 1;
   
 }
-
 
 void listagene_print(NO* no){
   //NO* temp = no;
@@ -114,10 +154,10 @@ void listagene_print(NO* no){
            // printf(" ] ");
          break;  
       case VOIDLIST:
-         printf("LISTA VAZIA \n");
+         printf("VAZIO");
          break;         
         default:
-            printf(" tipo não válido \n");
+            printf("tipo não válido");
             break;
     }
      no = no->prox;
@@ -127,38 +167,68 @@ void listagene_print(NO* no){
   
 }
 
+void lista_gene_vazia(NO*no){   
+     NO* aux = no;
+     printf("[");
+     int flag = 0;
+     while(aux){
+        switch (aux->tipo)
+        {
+
+        case VOIDLIST:
+            printf(" vazia ");
+            break;    
+        case LIST:
+            lista_gene_vazia(aux->compo.sublista);
+            break;
+        default:
+            flag =1;
+            break;
+        }
+        aux = aux->prox;
+     }
+     if (flag){printf(" nao vazia ");}
+     printf("]");
+}
+
 int main(){
-NO* L1;
-NO* L2;
-NO*L3;
-NO*L4;
-L1 = listagene_criar();
-L2 = listagene_criar();
-L3= listagene_criar();
+    NO* L1;
+    NO* L2;
+    NO*L3;
+    NO*L4;
+    L1 = listagene_criar();
+    L2 = listagene_criar();
+    L3= listagene_criar();
 
-int a = 5, b=9, c=6, d=8, h=9, j=10;
-//int b=9, c =6;
+    int a = 5, b=9, c=6, d=8, h=9, j=10;
+    //int b=9, c =6;
 
-char str[5];
-str[0]= 'a';
-str[1]= 'b';
-str[2]= 'g';
+    char str[4];
+    str[0]= 'a';
+    str[1]= 'b';
+    str[2]= 'g';
 
-listagene_adicionar(&a,INT,L1);
-listagene_adicionar(&b,INT,L1);
-//listagene_adicionar(&c,INT,L1);
+    listagene_adicionar(&a,INT,&L1);
+    listagene_adicionar(&b,INT,&L1);
+    //listagene_adicionar(&c,INT,L1);
 
 
-listagene_adicionar(&c,INT,L2);
-listagene_adicionar(&d, INT, L2);
-listagene_adicionar(L2,LIST,L1);
-listagene_adicionar(L3,LIST,L1);
-listagene_adicionar(&h,INT,L3);
-listagene_adicionar(&h,INT,L3);
-listagene_adicionar(str,STR,L3);
-listagene_adicionar(&j,INT,L1);
-listagene_print(L1);
+    //listagene_adicionar(&c,INT,&L2);
+    //listagene_adicionar(&d, INT, &L2);
+    listagene_adicionar(L2,LIST,&L1);
+    listagene_adicionar(L3,LIST,&L1);
+    listagene_adicionar(&h,INT,&L3);
+    listagene_adicionar(&h,INT,&L3);
+    listagene_adicionar(str,STR,&L3);
+    listagene_adicionar(&j,INT,&L1);
+    listagene_print(L1);
 
+    //lista_gen_remover(L2,LIST,&L1);
+
+    printf("\n\n");
+    //listagene_print(L1);
+
+    lista_gene_vazia(L1);
 }
 
 
