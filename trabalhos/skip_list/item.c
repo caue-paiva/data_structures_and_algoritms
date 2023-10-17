@@ -23,6 +23,8 @@ ITEM *item_criar (char* palavra, char* defi){
 
 int item_apagar(ITEM **item){
    if (*item != NULL){
+      free((*item)->palavra);
+      free((*item)->definicao);
       free (*item);
       item = NULL; 
       return(1);

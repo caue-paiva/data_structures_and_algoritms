@@ -23,6 +23,7 @@ não faz parte do TAD skiplist, apenas do input do problema */
           }     antiga++; 
       }
       *str_retorno = '\0';  
+
       return novo;
 }
 
@@ -52,7 +53,8 @@ int main(){
      if (strcmp(comando, "insercao") == 0) { //strcmp para ver qual o comando a ser executado
          palavra = strtok(NULL," "); //pega a segunda palavra (palavra) até achar um whitespace
          defini = strtok(NULL, "\n"); //pega o resto da string até chegar num \n (definicao)
-         char* nova_defini = (char*) malloc(strlen(defini) + 1);  /*é necessario criar novas cópias das strings para que a inserção de uma palavra/defini não muda a outra 
+         char* nova_defini = (char*) malloc(strlen(defini) + 1);
+           /*é necessario criar novas cópias das strings para que a inserção de uma palavra/defini não muda a outra 
          (oq seria o caso se elas fossem representadas pela msm string)*/
          if(nova_defini == NULL){exit(1);}
          strcpy(nova_defini, defini);
@@ -89,8 +91,7 @@ int main(){
          printf("comando errado \n");
       }
 
-
    }
-   apaga_skip_lista(&LISTA);
+    apaga_skip_lista(&LISTA);  //apaga a lista
 } 
    
