@@ -21,6 +21,6 @@
    void busca(char* procurado, int nivel, NOSKP *no);
    void imprime_todas_palavras(char letra, NOSKP* no);
    NOSKP * insercao(char* inserir,char* defini , int nivel, NOSKP *no);
-
+   void apaga_skip_lista(NOSKP** no);
 
 #endif

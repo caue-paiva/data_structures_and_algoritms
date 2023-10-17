@@ -52,7 +52,6 @@ NOSKIP* cria_skip_list(void){  //cria todos os nós headers e faz cada um deles 
             for (int i = 0; i < NIVEIS-1; i++)
             {   NOSKIP* no1 = no_criar_skip_header();
                 if (no1 == NULL){ exit(1);}
-
                 aux->prox_baixo = no1;     
                 no1->prox_dir = NULL;
                 aux = no1;
@@ -217,10 +216,10 @@ NOSKIP * insercao(char* inserir,char* defini , int nivel, NOSKIP *no) {  //funç
     if( no->prox_dir != NULL &&  no->prox_dir->item != NULL && (compara_no_string(no->prox_dir, inserir) > 0) && nivel==1){
       NOSKIP *novo = (NOSKIP*) malloc(sizeof(NOSKIP));   //se a proxima for maior, então a nova será inserida aqui
       if(novo ==NULL){exit(1);}
-      novo->item=item_criar(inserir,defini);
-      novo->prox_dir=no->prox_dir;
-      novo->prox_baixo=NULL;
-      no->prox_dir=novo;
+        novo->item=item_criar(inserir,defini);
+        novo->prox_dir=no->prox_dir;
+        novo->prox_baixo=NULL;
+        no->prox_dir=novo;
       if(random_fn()){
         return novo; //função aleatoria 
       }
@@ -232,24 +231,23 @@ NOSKIP * insercao(char* inserir,char* defini , int nivel, NOSKIP *no) {  //funç
     if(no->prox_dir==NULL){
       if(no->prox_baixo != NULL) {
         ins = insercao(inserir,defini , nivel-1, no->prox_baixo);  //prox é nulo e embaixo não é nulo, desce
-    }
+      }
       direction=0;  //0 É descendo
     }else if( no->prox_dir != NULL &&  no->prox_dir->item != NULL &&  (compara_no_string(no->prox_dir, inserir) > 0)){
       if(no->prox_baixo != NULL) { //desce
         ins = insercao(inserir,defini ,nivel-1, no->prox_baixo);
-    }
+      }
       direction=0;
     }else if((compara_no_string(no->prox_dir,inserir) < 0)){
         ins=insercao(inserir,defini ,nivel, no->prox_dir);
         direction=1;  //ANDANDO NA DIREITA   
     }
-
     if(direction==0 && ins!=NULL){
-      NOSKIP *novo = (NOSKIP*) malloc(sizeof(NOSKIP));
-      novo->item=ins->item;
-      novo->prox_dir=no->prox_dir; //adicionando items
-      novo->prox_baixo=ins;
-      no->prox_dir=novo;
+        NOSKIP *novo = (NOSKIP*) malloc(sizeof(NOSKIP));
+        novo->item=ins->item;
+        novo->prox_dir=no->prox_dir; //adicionando items
+        novo->prox_baixo=ins;
+        no->prox_dir=novo;
       if(random_fn()){ //função aleatoria
         return novo;
       }
@@ -260,4 +258,25 @@ NOSKIP * insercao(char* inserir,char* defini , int nivel, NOSKIP *no) {  //funç
     return NULL;
 }
 
+
+void apaga_skip_lista(NOSKIP** no){
+  NOSKIP* aux=*no;
+  NOSKIP* baixo=aux;
+  NOSKIP* aux2;
+  for (int i = NIVEIS; i >= 1; i--)
+  { 
+    aux = baixo;
+    if(baixo)
+       baixo = baixo->prox_baixo;
+    while(aux){
+          aux2 = aux->prox_dir;
+          if(i == 1){
+            item_apagar(&aux->item);
+          }
+          free(aux);
+          aux = aux2;
+    }
+  }
+   *no = NULL;
+}
 

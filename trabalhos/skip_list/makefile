@@ -14,4 +14,4 @@ item.o: item.c
 	gcc -c item.c
 
 clean:
-	del *.o *.exe
+	rm *.o *.exe

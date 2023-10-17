@@ -15,14 +15,14 @@ não faz parte do TAD skiplist, apenas do input do problema */
       if (novo ==NULL) {
           return NULL; 
       }
-      const char* p = str; 
-      char* q = novo;  
-      while (*p) {
-         if (*p != ' ' && *p != '\t' && *p != '\n' && *p != '\r') {
-              *q++ = *p; 
-          }    p++; 
+      const char* antiga = str; 
+      char* str_retorno = novo;  
+      while (*antiga) {
+          if (*antiga != ' ' && *antiga != '\t' && *antiga != '\n' && *antiga != '\r') {
+               *str_retorno++ = *antiga; 
+          }     antiga++; 
       }
-      *q = '\0';  
+      *str_retorno = '\0';  
       return novo;
 }
 
@@ -91,7 +91,6 @@ int main(){
 
 
    }
-
-
+   apaga_skip_lista(&LISTA);
 } 
    
