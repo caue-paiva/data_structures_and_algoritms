@@ -4,10 +4,10 @@ typedef struct no_ NO;
 
 struct no_{
     ITEM  *item;
-    NO *esq;
+    NO *esq;arvores/item.h
     NO *dir;
 };
-
+arvores/item.h
 struct ab_{
     NO *raiz;
     int profundidade;
