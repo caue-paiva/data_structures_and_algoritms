@@ -20,7 +20,7 @@ int random_fn(){
 }
 
 int compara_no_string(NOSKIP* NO, char* str2){  /*essa função compara o conteudo de um nó com a string buscada, ele foi feito para tornar expressoes de  ifs 
-                                                 mais claras e menos verbosas nas funções de busca,inserção,alteração */
+                                                mais claras e menos verbosas nas funções de busca,inserção,alteração */
      char* str1 = item_get_chave(NO->item);
      return strcmp(str1, str2);  
 }
@@ -90,11 +90,13 @@ NOSKIP * procura_lista2(char* procurado, int nivel, NOSKIP *no) { //função de 
 NOSKIP * muda_def(char* procurado, char* nova_def, int nivel, NOSKIP *no) { //função de mudar definição das palavras
     if(nivel==1){
       if(no->prox_dir==NULL || (compara_no_string(no->prox_dir, procurado) > 0)){  //ultimo nível e o próximo é nulo ou maior que o buscado, quer dizer que ele não esta na lista
+        free(nova_def);
         printf("OPERACAO INVALIDA\n");
         return NULL;
       }else if(compara_no_string(no->prox_dir, procurado) < 0){   //o proximo é menor, vai andar para direita
         return muda_def(procurado,nova_def, nivel, no->prox_dir);
       }else{
+          item_apaga_def(&no->prox_dir->item);
           item_set_defini(no->prox_dir->item, nova_def);    //achou a palavra, retona ela
         return no->prox_dir;
       }
@@ -109,6 +111,7 @@ NOSKIP * muda_def(char* procurado, char* nova_def, int nivel, NOSKIP *no) { //fu
      }
      else if(compara_no_string(no->prox_dir, procurado) == 0){  //achou o procurado
        no=no->prox_dir;
+       item_apaga_def(&no->item);
        item_set_defini(no->item, nova_def);
        while(no->prox_baixo!=NULL){
         no=no->prox_baixo;
@@ -210,6 +213,10 @@ NOSKIP * insercao(char* inserir,char* defini , int nivel, NOSKIP *no) {  //funç
       return NULL; //palavra não vai ser add no prox nivel
     }
     if( no->prox_dir != NULL &&  no->prox_dir->item != NULL && (compara_no_string(no->prox_dir, inserir) == 0) ){
+          if(defini){
+           free(defini);
+           defini = NULL;
+          }
           printf("OPERACAO INVALIDA\n");  //caso a palavra seja repetida é uma operação invalida
     }
 
@@ -255,6 +262,8 @@ NOSKIP * insercao(char* inserir,char* defini , int nivel, NOSKIP *no) {  //funç
     }else if(direction==1 && ins!=NULL){
       return ins;
     }
+    if(!defini)
+       free(inserir);
     return NULL;
 }
 

@@ -14,5 +14,5 @@
 	int item_set_chave(ITEM *item, char* chave);
 	int item_set_defini(ITEM *item, char* defi);
 	void item_imprimir_defi(ITEM *item);
-
+    int item_apaga_def(ITEM**);
 #endif

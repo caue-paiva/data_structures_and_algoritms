@@ -67,12 +67,13 @@ int main(){
          char* nova_palavra = remove_espaco(palavra);
          if (nova_palavra ==NULL){exit(1);}
          remove_lista_skip(nova_palavra, NIVEIS, LISTA); 
-
+         free(nova_palavra);
       } else if (strcmp(comando, "busca") == 0) {
          palavra = strtok(NULL," ");
          char* nova_palavra = remove_espaco(palavra);
          if (nova_palavra ==NULL){exit(1);}
          busca(nova_palavra, NIVEIS, LISTA);
+         free(nova_palavra);
 
       } else if (strcmp(comando, "alteracao") == 0) {
          palavra = strtok(NULL," ");
@@ -83,6 +84,7 @@ int main(){
          char* nova_palavra = remove_espaco(palavra);
          if (nova_palavra ==NULL){exit(1);}
          muda_def(nova_palavra, nova_defini, NIVEIS, LISTA);
+         free(nova_palavra);
 
       } else if (strcmp(comando, "impressao") == 0) {
          caractere = strbackup[10];  //pega o 10 char da string quando o comando impressão é dado, que é a letra que é para pesquisar
@@ -92,6 +94,7 @@ int main(){
       }
 
    }
+    free(strbackup);
     apaga_skip_lista(&LISTA);  //apaga a lista
 } 
    

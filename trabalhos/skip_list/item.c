@@ -32,6 +32,15 @@ int item_apagar(ITEM **item){
    return(0);
 }
 
+int item_apaga_def(ITEM**item){
+      if (*item != NULL){
+      free((*item)->definicao);
+      (*item)->definicao = NULL;
+      return(1);
+   }
+   return(0);
+}
+
 char* item_get_chave(ITEM *item){  //retorna a palavra
     if (item != NULL)
       return(item->palavra);
