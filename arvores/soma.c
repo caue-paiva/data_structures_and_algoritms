@@ -17,15 +17,15 @@ int soma_aux(NO* no_atual, AB* T){
    static int valor;
    int temp_soma;
    if(no_atual->dir){
-      valor += soma_aux(no_atual->dir);
+      valor += soma_aux(no_atual->dir,T);
    }
 
    if(no_atual->esq){
-      valor += soma_aux(no_atual->esq);
+      valor += soma_aux(no_atual->esq,T);
    }
 
    if(T->raiz == no_atual){
-      temp_soma = valor;
+      temp_soma = valor + item_get_chave(no_atual->item);
       valor = 0;
       return temp_soma;
    }
