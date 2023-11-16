@@ -1,4 +1,4 @@
-#include "abb.h"
+#include "avl.h"
 
 #define ERRO_ARV_NULL -1928727
 #define ARVO_MENOR_VAL -9878321
@@ -9,6 +9,7 @@ struct no_{
     ITEM  *item;
     NO *esq;
     NO *dir;
+    int altura;
 };
 
 
@@ -19,35 +20,35 @@ struct ab_{
 
 
 
-NO** abb_acha_menor(NO** raiz){
+NO** avl_acha_menor(NO** raiz){
     if(!(raiz) || !(*raiz) )
        return NULL;    
     if(!(*raiz)->esq)
         return raiz;
     else
-        return abb_acha_menor( &((*raiz)->esq));
+        return avl_acha_menor( &((*raiz)->esq));
 }
 
-NO** abb_acha_maior(NO** raiz){
+NO** avl_acha_maior(NO** raiz){
     if(!(raiz) || !(*raiz) )
        return NULL;    
     if(!(*raiz)->esq)
         return raiz;
     else
-        return abb_acha_maior( &((*raiz)->dir));
+        return avl_acha_maior( &((*raiz)->dir));
 }
 
-void abb_imprime_aux(NO* no_atual){
+void avl_imprime_aux(NO* no_atual){
     if(no_atual)
        printf(" %d", item_get_chave(no_atual->item));
     else 
       return;
-    abb_imprime_aux(no_atual->dir);
-    abb_imprime_aux(no_atual->esq);
+    avl_imprime_aux(no_atual->dir);
+    avl_imprime_aux(no_atual->esq);
 }
 
-void abb_imprime(AB* arvo){
-    abb_imprime_aux(arvo->raiz);
+void avl_imprime(AB* arvo){
+    avl_imprime_aux(arvo->raiz);
 }
 
 void troca_max_esq(NO *troca, NO *raiz, NO *ant){
@@ -64,7 +65,7 @@ void troca_max_esq(NO *troca, NO *raiz, NO *ant){
     troca = NULL;
 }
 
-NO* abb_busca_no(NO* no_atual, ITEM* item){
+NO* avl_busca_no(NO* no_atual, ITEM* item){
     if(!no_atual)
        return false;
     int valor_buscado = item_get_chave(item);
@@ -77,16 +78,16 @@ NO* abb_busca_no(NO* no_atual, ITEM* item){
         if(!no_atual->esq)
            return NULL;
         else
-           return abb_busca_no(no_atual->esq,item);
+           return avl_busca_no(no_atual->esq,item);
     }else{
         if(!no_atual->dir)
             return NULL;
         else
-            return  abb_busca_no(no_atual->dir, item);
+            return  avl_busca_no(no_atual->dir, item);
     }
 }
      
-NO* abb_busca_pai(NO* raiz, ITEM* procurado){
+NO* avl_busca_pai(NO* raiz, ITEM* procurado){
     if(!raiz ||item_get_chave(raiz->item) == item_get_chave(procurado)) // nesse caso a raiz é o item, não tem pai
        return NULL;
     
@@ -95,7 +96,7 @@ NO* abb_busca_pai(NO* raiz, ITEM* procurado){
             if (item_get_chave(raiz->dir->item) == item_get_chave(procurado)){
                 return raiz;
             }else
-            return abb_busca_pai(raiz->dir, procurado);
+            return avl_busca_pai(raiz->dir, procurado);
         }else 
           return NULL;
     }
@@ -105,21 +106,21 @@ NO* abb_busca_pai(NO* raiz, ITEM* procurado){
             if (item_get_chave(raiz->esq->item) == item_get_chave(procurado)){
                 return raiz;
             }else
-            return abb_busca_pai(raiz->esq, procurado);
+            return avl_busca_pai(raiz->esq, procurado);
         }else
           return NULL;
     }
 }
 
-bool abb_remove(AB* arvo, ITEM* item){ // mudar a função, usar ponteiro duplo e não precisa achar os pais
+bool avl_remove(AB* arvo, ITEM* item){ // mudar a função, usar ponteiro duplo e não precisa achar os pais
       if(!arvo || !arvo->raiz)
             return false;
-      NO* no_remover = abb_busca_no(arvo->raiz, item);
+      NO* no_remover = avl_busca_no(arvo->raiz, item);
       if(!no_remover)
          return false;
 
       if(no_remover->dir){
-            NO** copia_menor = abb_acha_menor(&no_remover->dir);
+            NO** copia_menor = avl_acha_menor(&no_remover->dir);
             item_apagar(&no_remover->item);
             no_remover->item = (*copia_menor)->item;
             if((*copia_menor)->dir){
@@ -131,7 +132,7 @@ bool abb_remove(AB* arvo, ITEM* item){ // mudar a função, usar ponteiro duplo 
               *copia_menor = NULL;
             }
       }else if(no_remover->esq){
-            NO** copia_maior = abb_acha_maior(&no_remover->esq);
+            NO** copia_maior = avl_acha_maior(&no_remover->esq);
             item_apagar(&no_remover->item); // item apagar não é o problema
             no_remover->item = (*copia_maior)->item;
             if((*copia_maior)->esq){
@@ -154,9 +155,7 @@ bool abb_remove(AB* arvo, ITEM* item){ // mudar a função, usar ponteiro duplo 
       return true;
 }
     
-
-
-bool ab_remover_aux(NO **raiz, int chave){
+bool avl_remover_aux(NO **raiz, int chave){
     NO *p;
 
     if(*raiz == NULL) return (false);
@@ -196,19 +195,28 @@ void apagar_arvore(NO **raiz){
     }
 }
 
-NO *abb_criar_no(ITEM *item){
+NO *avl_criar_no(ITEM *item){
     NO *no = (NO*) malloc(sizeof(NO));
         if(!no)
            exit(1);
     no->item = item;
+    no->nivel = 0;
     no->esq = NULL;
     no->dir = NULL;
-
     return (no);
 }
 
-bool abb_inserir_no(NO *raiz, ITEM *item, AB* arvo){
-      static int niveis_var;
+NO* rotacao_dir(NO* desbalan){
+    NO* nova_raiz = desbalan->esq;
+    desbalan->esq = nova_raiz->dir;
+    nova_raiz->dir = desbalan;
+    //fazer codigo de calcular altura
+
+    return nova_raiz;
+}
+
+bool avl_inserir_no(NO *raiz, ITEM *item, AB* arvo){
+      static int niveis_var; //fazer uma conta para setar não nível mas a altura
       if(!raiz)
          return false;
 
@@ -219,7 +227,7 @@ bool abb_inserir_no(NO *raiz, ITEM *item, AB* arvo){
        
       if(item_get_chave(item) > item_get_chave(raiz->item)){
          if(!raiz->dir){
-            raiz->dir = abb_criar_no(item);
+            raiz->dir = avl_criar_no(item);
             if(arvo->profundidade < (niveis_var+1))
                arvo->profundidade = (niveis_var+1);
             niveis_var= 0;
@@ -227,12 +235,12 @@ bool abb_inserir_no(NO *raiz, ITEM *item, AB* arvo){
          }
          else{
            niveis_var++;
-           return abb_inserir_no(raiz->dir,item, arvo);
+           return avl_inserir_no(raiz->dir,item, arvo);
          }
             
        }else{
          if(!raiz->esq){
-            raiz->esq = abb_criar_no(item);
+            raiz->esq = avl_criar_no(item);
             if(arvo->profundidade < (niveis_var+1))
                arvo->profundidade = (niveis_var+1);
             niveis_var = 0;
@@ -240,14 +248,14 @@ bool abb_inserir_no(NO *raiz, ITEM *item, AB* arvo){
          }
          else{
             niveis_var++;
-            return abb_inserir_no(raiz->esq,item, arvo);
+            return avl_inserir_no(raiz->esq,item, arvo);
          }
             
        }
    
 }
 
-AB *abb_criar(void){
+AB *avl_criar(void){
     AB *r = (AB*) malloc(sizeof(AB));
 
     if(r != NULL){
@@ -258,22 +266,22 @@ AB *abb_criar(void){
     return (r);
 }
 
-bool abb_inserir(AB *T, ITEM *item){
+bool avl_inserir(AB *T, ITEM *item){
     if(T->raiz == NULL){
         T->profundidade = 1;
-        return ((T->raiz = abb_criar_no(item)) != NULL);
+        return ((T->raiz = avl_criar_no(item)) != NULL);
     }
-    return abb_inserir_no(T->raiz, item, T);
+    return avl_inserir_no(T->raiz, item, T);
 }
 
-void abb_apagar_arvore(AB **T){
+void avl_apagar_arvore(AB **T){
     apagar_arvore(&(*T)->raiz);
     free(*T);
     *T = NULL;
 }
 
-bool abb_remover(AB *T, int chave){
-    if(T != NULL) return (ab_remover_aux(&T->raiz, chave));
+bool avl_remover(AB *T, int chave){
+    if(T != NULL) return (avl_remover_aux(&T->raiz, chave));
     return (false);
 }  
 
