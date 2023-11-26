@@ -12,6 +12,7 @@ struct no_H {
 struct avl{
     NO *raiz;
     int profundidade;
+    int num_elem;
 };
 
 NO** acha_menor_aux(NO** raiz){
@@ -220,6 +221,7 @@ bool avl_inserir(AVL* arvo, ITEM* item){
     
     NO* novo_no = avl_criar_no(item);
     arvo->raiz = avl_insere_no(arvo->raiz,novo_no);
+    (arvo->num_elem)++;
     arvo->profundidade = max( avl_altura_no(arvo->raiz->dir), avl_altura_no(arvo->raiz->esq) )+1; //muda a profudidade da arvore
     return true;
 }
@@ -230,6 +232,7 @@ AVL *avl_criar(void){
        exit(1);
     arv->raiz = NULL;
     arv->profundidade = -1;
+    arv->num_elem = 0;
     return (arv);
 }
 
@@ -289,6 +292,7 @@ bool avl_remove(AVL*arv, ITEM* item){
       return false;
     else{
         arv->raiz = nova_raiz;
+        (arv->num_elem)--;
         arv->profundidade = max( avl_altura_no(nova_raiz->dir), avl_altura_no(nova_raiz->esq ) )+1; //muda a profudidade da arvore
         return true;
     }
@@ -302,3 +306,33 @@ int avl_profundidade(AVL* arv){
     return ( max(avl_altura_no(arv->raiz->dir), avl_altura_no(arv->raiz->esq)) +1);
 }
 
+int avl_num_elem(AVL* arv){
+    if(!arv)
+      return -1;
+    return arv->num_elem;
+}
+
+void vetor_avl_aux(int* vetor, NO* no_atual, NO* raiz_da_arvo){ //variavel para a raiz da arvore para comparaca
+    if(!no_atual || !raiz_da_arvo)
+       return;
+    static int index_atual = 0; //essa variavel static mantem conta de qual index do vetor vamos inserir cada elemento
+    int elemento_arvore = item_get_chave(no_atual->item);
+    vetor[index_atual] = elemento_arvore;
+    index_atual++;
+
+    vetor_avl_aux(vetor, no_atual->dir, raiz_da_arvo);
+    vetor_avl_aux(vetor, no_atual->esq, raiz_da_arvo);
+
+    if(no_atual == raiz_da_arvo) //se ao voltar das chamadas recursivas estivermos na raiz novamente, setamos o index para zero
+        index_atual = 0;
+}
+
+int* avl_para_vetor(AVL*arv){ //justificar por que escolher essa forma de iterar na AVL
+    if(!arv || ! arv->raiz)
+       return NULL;
+    int* novo_vetor = (int*) malloc (sizeof(int) * (arv->num_elem));
+    if(!novo_vetor)
+       return NULL; //essa funcao precisa ser null checada ao ser usada
+    vetor_avl_aux(novo_vetor, arv->raiz, arv->raiz);
+    return novo_vetor;
+}
