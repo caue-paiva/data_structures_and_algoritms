@@ -15,7 +15,7 @@
     NO* avl_acha_maior(AVL* arvo);
     NO* avl_acha_menor(AVL* arvo);
     void avl_imprime(AVL* arvo);
-    bool avl_busca_item(NO* no_atual, ITEM* item);
+    bool avl_busca_item(AVL* arv, ITEM* item);
     bool avl_remove(AVL*arv, ITEM* item);
     int* avl_para_vetor(AVL*arv);
     int avl_num_elem(AVL* arv);

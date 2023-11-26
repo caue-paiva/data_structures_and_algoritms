@@ -1,78 +1,53 @@
-#define N 100
+#include "conjunto.h"
 
-typedef struct {
-    int arr[N];
+struct conjun_{
+    AVL* arvo_elem;
     int num_elem;
-}conjun;
+};
 
-void conjun_remove(conjun* s, int* remo_arr, int arr_size){
-   int j = 0;
-   int remo_count =0;
-
-   for (int i = 0; i < s->num_elem; i++){
-       int should_remove = 0;
-       for (int k = 0; k < arr_size; k++){
-           if (s->arr[i] == remo_arr[k]){
-               should_remove = 1;
-               break;
-           }
-       }
-       if (should_remove){
-           remo_count++;
-       } else {
-           s->arr[j] = s->arr[i];
-           j++;   
-       }
+bool conjun_remove(conjun* C1, ITEM* item){
+   if(!C1 || !item)
+     return false;
+   if(!C1->arvo_elem)  //esse segundo if existe para garantir que a arvo do conjunto n esteja vazia e ele esta abaixo para n dar segfault 
+     return false;   //fazer -> em um ponteiro nulo da segfault
+   if(avl_remove(C1->arvo_elem, item)){ //n precisa usa a funcao busca conjunto pq a remocao ja busca na arvore
+     (C1->num_elem)--;  //chama a funcao remove da AVL, reduz o numero de items do conjunto
+     return true;
    }
- (s->num_elem) -= (remo_count); 
- //printf( "%d ", remo_count);
+   return false;
 }
 
-int conjun_existe(conjun * C1, int num){
-   
-   for (int i = 0; i < (C1->num_elem); i++){
-        if (C1->arr[i] == num)
-            return 1;
-   }   
-   return 0;
+bool conjun_pertence(conjun * C1, ITEM* item){
+    return avl_busca_item(C1->arvo_elem,item); //busca no conjunto e so uma busca na arvore AVL
 }
 
-conjun* conjun_criar(int *arra, int arr_size){
-    conjun* new_set = (conjun*) malloc(sizeof(conjun));
-         if (new_set==NULL)
+conjun* conjun_criar(void){
+    conjun* novo_conjun = (conjun*) malloc(sizeof(conjun));
+         if (!novo_conjun)
            exit(1);
-     new_set->num_elem = 0;
-     for (int i = 0; i < arr_size; i++){ 
-        if (!conjun_existe(new_set, arra[i])){
-       
-            new_set->arr[new_set->num_elem] = arra[i];
-            new_set->num_elem++;
-        }
-     }    
-    return new_set;
+    novo_conjun->num_elem = 0;
+    novo_conjun->arvo_elem = avl_criar();
+    return novo_conjun;
 } 
 
-void conjun_add_item(conjun * C1, int num){
-   if (C1->num_elem >= N-1){ 
-    return;
-   } else if (conjun_existe(C1,num)){
-    printf("already included on the conjun \n");
-   } else {
-     C1->arr[C1->num_elem] = num;
-     (C1->num_elem)++;
-   }
+bool conjun_add_item(conjun * C1, ITEM* item){
+    if(!C1)
+       return false;
+    if(avl_inserir(C1->arvo_elem,item)){
+        C1->num_elem++;
+        return true;
+    }
+        return false;
 }
 
-conjun* set_uni(conjun* C1,  conjun* C2){
+conjun* conjun_intersec(conjun* C1,  conjun* C2){
      if (!C1 || !C2)
-        return NULL;
-    
-    conjun* new_set = (conjun*) malloc(sizeof(conjun));
-    if (!new_set)
-        exit(1);
-    NO* maior_conjun;
-    NO* menor_conjun;
+        exit(1); 
+    conjun* novo_conjunto = conjun_criar();
 
+    conjun* maior_conjun;
+    conjun* menor_conjun;
+   
     if(C1->num_elem > C2->num_elem){
         maior_conjun = C1;
         menor_conjun = C2;
@@ -80,73 +55,59 @@ conjun* set_uni(conjun* C1,  conjun* C2){
         maior_conjun = C2;
         menor_conjun = C1;
     }
-          
+
+    int* vetor_menor_conjunto = avl_para_vetor(menor_conjun->arvo_elem);
+    if(!vetor_menor_conjunto)
+       exit(1);
+    ITEM* item_atual;      
   //é mais eficiente loopar no menor conjunto e busca se os seus elementos existem no maior
     for (int i = 0; i < menor_conjun->num_elem ; i++){
-    //achar um jeito de "ITERAR" pela AVL e pegar todos elementos
-        if(!conjun_existe(maior_conjun, cur_set->arr[i])){
-                 conjun_add_item(new_set,cur_set->arr[i]);
-        } 
+        item_atual = item_criar(vetor_menor_conjunto[i]);//achar um jeito de "ITERAR" pela AVL e pegar todos elementos
+        if(conjun_pertence(maior_conjun, item_atual))
+            conjun_add_item(novo_conjunto,item_atual);   
     }      
-
-     return new_set;
+    free(vetor_menor_conjunto);
+    return novo_conjunto;
 }
 
-void set_print(conjun* S){
-  for (int i = 0; i < S->num_elem; i++)
-  { printf(" %d ", S->arr[i]);}
-    printf(" \n");
+void conjun_imprime(conjun* C1){
+     if(!C1)
+       return;
+     avl_imprime(C1->arvo_elem);
 }
 
-/*conju* set_intersec(int Scount, ...){
-    if (Scount =<1 ){
-        printf("not possible to do this operation with less than 2 sets");
-        return NULL;
+conjun* conjun_uniao(conjun* C1, conjun* C2){
+    if(!C1 || !C2)
+       exit(1);
+
+    conjun* novo_conjun =conjun_criar();
+
+    int *vetor1 = avl_para_vetor(C1->arvo_elem);
+    int *vetor2 = avl_para_vetor(C2->arvo_elem);
+    ITEM* novo_item;
+    int novo_num_elem = C1->num_elem;
+    for (int i = 0; i < C1->num_elem ; i++){
+      novo_item = item_criar(vetor1[i]);
+      conjun_add_item(novo_conjun,novo_item);
     }
 
-    va_list args;
-    va_start(args, Scount);
+    for (int i = 0; i < C2->num_elem ; i++){
+      novo_item = item_criar(vetor2[i]);
+      if(!conjun_pertence(novo_conjun, novo_item)){
+        conjun_add_item(novo_conjun,novo_item);
+        novo_num_elem++;
+      }     
+    }
+    free(vetor1);
+    free(vetor2);
+    novo_conjun->num_elem = novo_num_elem;
+    return novo_conjun;
+}
 
-    set* new_set = (set*) malloc(sizeof(set));
-         if (new_set==NULL){
-             exit(1);
-         }
-     for (int i = 0; i < Scount; i++){
-       set* cur_set =var_arg(args, set*);
-       
-       if (i == 0){
-        for (int i = 0; i < (cur_set->size); i++){
-           Set_add(new_set, (cur_set->arr[i]));
-         }
-     } else{
-
-     }
-
-     }
-}*/
-
- 
-int main(){  ///main just to test the functions
-
-int arr1[]= {1,2,3,4,56,4,4,4,4};
-int arr3[]= {1,2};
-int arr2[]= {1,6,5,8,9,8,9};
-
-set* C1 = conjun_criar(arr1, sizeof(arr1)/sizeof(int)); //1,2,3,4,56
-
-set* s2 = conjun_criar(arr2, sizeof(arr2)/sizeof(int));
-
-set* s3 = set_uni(2,C1, s2);
-
-//
-
-conjun_remove(C1,arr3,sizeof(arr3)/sizeof(int));
-
-set_print(C1);
-//set_print(s2);
-
-set_print(s3);
-
-//conjun_remove
-
+void conjun_apaga(conjun** C1){
+    if(!(*C1))
+       return;
+    avl_apagar_arvore(&((*C1)->arvo_elem));
+    free(*C1);
+    *C1 = NULL;
 }

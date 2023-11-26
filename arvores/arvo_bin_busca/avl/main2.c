@@ -13,16 +13,18 @@ int main(){
    avl_inserir(arvo1,i1);
    avl_inserir(arvo1,i2);
    avl_inserir(arvo1,i3);
+   avl_imprime(arvo1);
+   printf("a remocao do item %d tem esse resultado: %d \n", item_get_chave(i1), avl_remove(arvo1,i1));
+   //printf("num de elem da arvo : %d \n", avl_num_elem(arvo1));
+   avl_remove(arvo1,i1);
+   printf("a remocao do item %d tem esse resultado: %d \n", item_get_chave(i1), avl_remove(arvo1,i1));
    avl_inserir(arvo1,i4);
    avl_imprime(arvo1);
-   printf("num de elem da arvo : %d \n", avl_num_elem(arvo1));
-   avl_remove(arvo1,i1);
-   avl_imprime(arvo1);
    int* novo_vetor = avl_para_vetor(arvo1);
-   printf("num de elem da arvo : %d \n", avl_num_elem(arvo1));
-   printf("\n");
+   //printf("num de elem da arvo : %d \n", avl_num_elem(arvo1));
+   //printf("\n");
    for (int i = 0; i < avl_num_elem(arvo1); i++){
-      printf("%d ", novo_vetor[i]);
+     // printf("%d ", novo_vetor[i]);
    }
    
 

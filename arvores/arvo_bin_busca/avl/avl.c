@@ -43,7 +43,7 @@ NO* avl_acha_maior(AVL* arvo){
 
 void avl_imprime_aux(NO* no_atual, int profun){
     if(no_atual)
-       printf("item: %d com profundidade %d  ", item_get_chave(no_atual->item), profun);
+       printf("item: %d com profundidade %d // ", item_get_chave(no_atual->item), profun);
     else 
       return;
     avl_imprime_aux(no_atual->dir, profun+1);
@@ -90,7 +90,7 @@ NO* avl_busca_no(NO* no_atual, ITEM* item){
     }
 }
 
-bool avl_busca_item(NO* no_atual, ITEM* item){
+bool aux_avl_busca(NO* no_atual, ITEM* item){
     if(!no_atual)
        return false;
     int valor_buscado = item_get_chave(item);
@@ -101,15 +101,21 @@ bool avl_busca_item(NO* no_atual, ITEM* item){
 
     if(valor_atual > valor_buscado){
         if(!no_atual->esq)
-           return NULL;
+           return false;
         else
            return avl_busca_no(no_atual->esq,item);
     }else{
         if(!no_atual->dir)
-            return NULL;
+            return false;
         else
             return  avl_busca_no(no_atual->dir, item);
     }
+}
+
+bool avl_busca_item(AVL* arv, ITEM* item){
+    if(!arv)
+      return false;
+    return aux_avl_busca(arv->raiz, item);
 }
      
 NO* avl_busca_pai(NO* raiz, ITEM* procurado){
@@ -218,7 +224,8 @@ NO* avl_insere_no(NO* raiz, NO* novo_no){
 bool avl_inserir(AVL* arvo, ITEM* item){
     if(!arvo)
       return false;
-    
+    if(avl_busca_item(arvo,item)) 
+       return false;
     NO* novo_no = avl_criar_no(item);
     arvo->raiz = avl_insere_no(arvo->raiz,novo_no);
     (arvo->num_elem)++;
@@ -286,6 +293,8 @@ NO* remove_arvo(NO** raiz, ITEM* item){
 
 bool avl_remove(AVL*arv, ITEM* item){
     if(!arv)
+      return false;
+    if(!avl_busca_item(arv,item))
       return false;
     NO* nova_raiz = remove_arvo(&(arv->raiz),item);
     if(!nova_raiz)
