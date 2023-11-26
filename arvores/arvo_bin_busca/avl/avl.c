@@ -1,6 +1,4 @@
 #include "avl.h"
-#define ERRO_ARV_NULL -1928727
-#define ARVO_MENOR_VAL -9878321
 #define max(a,b) ((a>b) ? a: b)
 
 
@@ -11,13 +9,10 @@ struct no_H {
     int altura;
 };
 
-
 struct avl{
     NO *raiz;
     int profundidade;
 };
-
-
 
 NO** acha_menor_aux(NO** raiz){
     if(!(raiz) || !(*raiz) )
@@ -45,17 +40,19 @@ NO* avl_acha_maior(AVL* arvo){
     return *acha_maior_aux( (&(arvo->raiz)) );
 }
 
-void avl_imprime_aux(NO* no_atual){
+void avl_imprime_aux(NO* no_atual, int profun){
     if(no_atual)
-       printf("item: %d com altura %d  ", item_get_chave(no_atual->item), no_atual->altura);
+       printf("item: %d com profundidade %d  ", item_get_chave(no_atual->item), profun);
     else 
       return;
-    avl_imprime_aux(no_atual->dir);
-    avl_imprime_aux(no_atual->esq);
+    avl_imprime_aux(no_atual->dir, profun+1);
+    avl_imprime_aux(no_atual->esq, profun+1);
 }
 
 void avl_imprime(AVL* arvo){
-    avl_imprime_aux(arvo->raiz);
+    int profundidade = 0;
+    avl_imprime_aux(arvo->raiz, profundidade);
+    printf("\n");
 }
 
 void troca_max_esq(NO *troca, NO *raiz, NO *ant){
@@ -63,10 +60,8 @@ void troca_max_esq(NO *troca, NO *raiz, NO *ant){
         troca_max_esq(troca->dir, raiz, troca);
         return;
     }
-
     if(raiz == ant) ant->esq = troca->esq;
     else ant->dir = troca->esq;
-
     raiz->item = troca->item;
     free(troca);
     troca = NULL;
@@ -225,6 +220,7 @@ bool avl_inserir(AVL* arvo, ITEM* item){
     
     NO* novo_no = avl_criar_no(item);
     arvo->raiz = avl_insere_no(arvo->raiz,novo_no);
+    arvo->profundidade = max( avl_altura_no(arvo->raiz->dir), avl_altura_no(arvo->raiz->esq) )+1; //muda a profudidade da arvore
     return true;
 }
 
@@ -243,5 +239,66 @@ void avl_apagar_arvore(AVL **T){
     *T = NULL;
 }
 
+NO* remove_arvo(NO** raiz, ITEM* item){
+    if(!(*raiz))  //no é nulo
+      return NULL;
 
+    int valor_buscado = item_get_chave(item); //valor que estamos procurando
+    if(valor_buscado == item_get_chave((*raiz)->item)){
+       if(!(*raiz)->dir || !(*raiz)->esq){ //caso em que ou nao tem filhos ou so tem 1 filho em qualquer lado
+        NO* temp_no = *raiz;
+        if (!(*raiz)->dir)
+            (*raiz) = (*raiz)->esq;
+        else if (!(*raiz)->esq)
+           (*raiz) = ((*raiz)->dir);
+        free(temp_no);
+        temp_no = NULL;
+       }else 
+          troca_max_esq((*raiz)->esq,(*raiz),(*raiz)); //caso em que tem 2 filhos, chama a funcao troca_max_esq
+    }else if(valor_buscado > item_get_chave((*raiz)->item)) //se o valor buscado for maior vamos para dir
+       (*raiz)->dir = remove_arvo(&(*raiz)->dir, item);
+    else
+       (*raiz)->esq = remove_arvo(&(*raiz)->esq, item); //se o valor buscado for menor vamos para esq
+
+
+    if (*raiz){
+     (*raiz)->altura = max( avl_altura_no((*raiz)->dir), avl_altura_no((*raiz)->esq ) )+1;  //coloca a nova altura da arvore
+
+        if((avl_altura_no((*raiz)->esq) - avl_altura_no((*raiz)->dir)) == 2)
+           if((avl_altura_no((*raiz)->esq->esq) - avl_altura_no((*raiz)->esq->dir)) >= 0 )  //verifica o sinal do filho para ver se precisa de rota dupla
+              (*raiz) = rotacao_dir((*raiz));
+           else
+              (*raiz) = rotacao_esq_dir((*raiz));
+             
+        if((avl_altura_no((*raiz)->esq)- avl_altura_no((*raiz)->dir)) == -2)  //rotina de rotacao, similar a na insercao
+          if( (avl_altura_no((*raiz)->dir->esq) - avl_altura_no((*raiz)->dir->dir)) <= 0 ) 
+               (*raiz) = rotacao_esq((*raiz));
+           else
+               (*raiz) = rotacao_dir_esq((*raiz));
+             
+
+    return (*raiz);         //retorna o no modificado dps da remocao e rotacao
+    }
+}
+
+bool avl_remove(AVL*arv, ITEM* item){
+    if(!arv)
+      return false;
+    NO* nova_raiz = remove_arvo(&(arv->raiz),item);
+    if(!nova_raiz)
+      return false;
+    else{
+        arv->raiz = nova_raiz;
+        arv->profundidade = max( avl_altura_no(nova_raiz->dir), avl_altura_no(nova_raiz->esq ) )+1; //muda a profudidade da arvore
+        return true;
+    }
+}
+
+int avl_profundidade(AVL* arv){
+    if(!arv)
+      return -2;
+    if(!arv->raiz)
+      return -1;
+    return ( max(avl_altura_no(arv->raiz->dir), avl_altura_no(arv->raiz->esq)) +1);
+}
 
