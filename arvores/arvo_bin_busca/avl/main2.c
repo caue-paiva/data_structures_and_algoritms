@@ -4,6 +4,8 @@ Operacoes testadas ate agora 26/11/2023:
 Criar conjun: um pouco de teste, funciona bem
 Add conjun: bastante teste, parece que funciona bem
 remover e pertence: um pouco de teste, funciona bem
+conjunto uniao: Um pouco de teste, parece funcionar bem
+conjunto intersec: testei um pouco, ta funcionando ok dps de eu colocar um check de um deles ser vazio
 
 
 A melhorar:
@@ -11,6 +13,7 @@ A melhorar:
 
 2) Algoritmo da uniao entre 2 conjuntos, ver como otimizar ele por si so e a questao acima
 
+3) Apagar arvore ta congelando o terminal do windows, ver isso ai (acontece quando apaga o C2) [DESCOBRI]: isso acontece quando vc coloca o mesmo item and 2 conjuntos e apaga os 2, eu não sei se isso é um erro que deve ser resolvido
 
 Relatorio:
 Colocar a prova da nossa solucao da func intersec ser mais eficiente (colcoar grafico do geogebra se puder)
@@ -27,18 +30,49 @@ int main(){
    ITEM* i3 = item_criar(6);
    ITEM* i4 = item_criar(8);
    ITEM* i5 = item_criar(9);
+   ITEM* i6 = item_criar(8);
+   ITEM* i7 = item_criar(9);
    conjun* C1 = conjun_criar();
+   conjun* C2 = conjun_criar();
+   conjun* C5 = conjun_criar();
+   conjun* C6 = conjun_criar();
    conjun_add_item(C1,i1);
    conjun_add_item(C1,i2);
    conjun_add_item(C1,i3);
-   printf("pertence %d \n",conjun_pertence(C1,i3));
-   //conjun_imprime(C1);
+   conjun_add_item(C1,i4);
+   conjun_add_item(C1,i5);
+   
+   conjun_add_item(C2,i6);
+   conjun_add_item(C2,i7);
+   
+  // printf(" tam do conjun : %d \n", conjun_tamanho(C1));
+  // conjun_remove(C1,i1);
+  // printf(" tam do conjun : %d \n", conjun_tamanho(C1));
+  // conjun_add_item(C1,i1);
+ //  conjun_add_item(C1,i1);
+  // printf(" tam do conjun : %d \n", conjun_tamanho(C1));
+
+  // printf("pertence %d \n",conjun_pertence(C1,i3));
+   // conjun_imprime(C1);
    //printf(" %d \n",conjun_add_item(C1,i3));
-   printf("remove %d \n",conjun_remove(C1,i3));
-   //conjun_imprime(C1);
-   printf("pertence %d \n",conjun_pertence(C1,i3));
-   conjun_add_item(C1,i3);
-   printf("pertence %d \n",conjun_pertence(C1,i3));
+ //  printf("remove %d \n",conjun_remove(C6,i3));
+    // conjun_imprime(C2);
+  // printf("pertence %d \n",conjun_pertence(C6,i3));
+  // conjun_add_item(C1,i3);
+  // printf("pertence %d \n",conjun_pertence(C1,i3));
+     
+    conjun* C4 = conjun_intersec(C1,C5);
+    conjun* C7 = conjun_intersec(C1,C2);
+   // printf(" tam do conjun : %d \n", conjun_tamanho(C4));
+
+
+   conjun_apaga(&C1);
+   conjun_apaga(&C2);
+   conjun_apaga(&C4);
+   conjun_apaga(&C5);
+   conjun_apaga(&C7);
+
+    // conjun_imprime(C3);
 
 
 

@@ -51,8 +51,11 @@ void avl_imprime_aux(NO* no_atual, int profun){
 }
 
 void avl_imprime(AVL* arvo){
-    int profundidade = 0;
-    avl_imprime_aux(arvo->raiz, profundidade);
+    if(arvo->raiz){
+      int profundidade = 0;
+      avl_imprime_aux(arvo->raiz, profundidade);
+    }else
+        printf("vazio");
     printf("\n");
 }
 

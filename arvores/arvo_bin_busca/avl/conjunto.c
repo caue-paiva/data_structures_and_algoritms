@@ -42,12 +42,15 @@ bool conjun_add_item(conjun * C1, ITEM* item){
 
 conjun* conjun_intersec(conjun* C1,  conjun* C2){
      if (!C1 || !C2)
-        exit(1); 
+         printf("quitando programa");
     conjun* novo_conjunto = conjun_criar();
-
+         
+    if(!C1->arvo_elem || !C2->arvo_elem || C1->num_elem == 0 || C2->num_elem == 0) //se um dos conjuntos estiver vazio retorna um novo conjunto vazio
+        return novo_conjunto;
+     
     conjun* maior_conjun;
     conjun* menor_conjun;
-   
+    int tam_novo_conjun = 0;
     if(C1->num_elem > C2->num_elem){
         maior_conjun = C1;
         menor_conjun = C2;
@@ -63,10 +66,14 @@ conjun* conjun_intersec(conjun* C1,  conjun* C2){
   //é mais eficiente loopar no menor conjunto e busca se os seus elementos existem no maior
     for (int i = 0; i < menor_conjun->num_elem ; i++){
         item_atual = item_criar(vetor_menor_conjunto[i]);//achar um jeito de "ITERAR" pela AVL e pegar todos elementos
-        if(conjun_pertence(maior_conjun, item_atual))
-            conjun_add_item(novo_conjunto,item_atual);   
+        if(conjun_pertence(maior_conjun, item_atual)){
+           conjun_add_item(novo_conjunto,item_atual);
+           tam_novo_conjun++;
+        }
+               
     }      
     free(vetor_menor_conjunto);
+    novo_conjunto->num_elem = tam_novo_conjun;
     return novo_conjunto;
 }
 
@@ -105,9 +112,19 @@ conjun* conjun_uniao(conjun* C1, conjun* C2){
 }
 
 void conjun_apaga(conjun** C1){
-    if(!(*C1))
-       return;
+    if(!(*C1)){
+      printf("conjunto null");
+         return;
+    }
+    
     avl_apagar_arvore(&((*C1)->arvo_elem));
+    printf(" apagou arvo ");
     free(*C1);
     *C1 = NULL;
+}
+
+int conjun_tamanho(conjun* C1){
+  if(!C1)
+    return -1;
+  return C1->num_elem;
 }
