@@ -25,6 +25,78 @@ Lembrar de verificar se existe memory leak com a valgrind antes de entregar
 
 
 int main(){
+
+ int tam1, tam2, input_val1,input_val2 ,comando, input_pertence;
+ ITEM* novo_item1;
+ ITEM* primeiro_item;
+ AVL* jjj = avl_criar();
+ //AVL* jjj =  avl_criar();
+ //scanf("%d",&tam1);
+ //scanf("%d",&tam2);
+/* ITEM* temp_item2 = item_criar(1);
+ ITEM* temp_item3 = item_criar(9);
+ ITEM* temp_item4 = item_criar(7);
+ avl_inserir(jjj, temp_item2);
+ avl_inserir(jjj, temp_item3);
+ avl_inserir(jjj, temp_item4); */
+ //avl_imprime(jjj);
+
+printf( "comecou o antigo \n");
+   AVL* arvo1 = avl_criar();
+   ITEM* i1 = item_criar(1);
+   ITEM* i2 = item_criar(9);
+   ITEM* i3 = item_criar(3);
+   
+   avl_inserir(arvo1,i1);
+   avl_inserir(arvo1,i2);
+   avl_inserir(arvo1,i3);
+   avl_imprime(arvo1); 
+
+
+ /* for (int i = 0; i < 3; i++) {
+    scanf("%d", &input_val1);
+   // printf("%d ",input_val1);
+    novo_item1 =  item_criar(input_val1);
+    if(i==0){
+      primeiro_item = novo_item1;
+      printf("novo_item ptr %p \n", novo_item1);
+    }
+    printf("item: %d ", item_get_chave(novo_item1));
+    printf(" deu certo %d \n", avl_inserir(C1, novo_item1));
+   //printf("erro na insercao do item \n");
+ } */
+ //avl_imprime(C1);
+// printf("item primeiro %p \n", primeiro_item);
+
+
+
+}
+
+  /*AVL* arvo1 = avl_criar();
+   ITEM* i1 = item_criar(2);
+   ITEM* i2 = item_criar(4);
+   ITEM* i3 = item_criar(6);
+   ITEM* i4 = item_criar(8);
+   ITEM* i5 = item_criar(9);
+
+   avl_inserir(arvo1,i1);
+   avl_inserir(arvo1,i2);
+   avl_inserir(arvo1,i3);
+   avl_imprime(arvo1);
+   printf("a remocao do item %d tem esse resultado: %d \n", item_get_chave(i1), avl_remove(arvo1,i1));
+   //printf("num de elem da arvo : %d \n", avl_num_elem(arvo1));
+   avl_remove(arvo1,i1);
+   printf("a remocao do item %d tem esse resultado: %d \n", item_get_chave(i1), avl_remove(arvo1,i1));
+   avl_inserir(arvo1,i4);
+   avl_imprime(arvo1);
+   int* novo_vetor = avl_para_vetor(arvo1);
+   //printf("num de elem da arvo : %d \n", avl_num_elem(arvo1));
+   //printf("\n");
+   for (int i = 0; i < avl_num_elem(arvo1); i++){
+     // printf("%d ", novo_vetor[i]);
+   } */
+
+   /*
    ITEM* i1 = item_criar(2);
    ITEM* i2 = item_criar(4);
    ITEM* i3 = item_criar(6);
@@ -74,30 +146,4 @@ int main(){
 
     // conjun_imprime(C3);
 
-
-
-}
-
-  /*AVL* arvo1 = avl_criar();
-   ITEM* i1 = item_criar(2);
-   ITEM* i2 = item_criar(4);
-   ITEM* i3 = item_criar(6);
-   ITEM* i4 = item_criar(8);
-   ITEM* i5 = item_criar(9);
-
-   avl_inserir(arvo1,i1);
-   avl_inserir(arvo1,i2);
-   avl_inserir(arvo1,i3);
-   avl_imprime(arvo1);
-   printf("a remocao do item %d tem esse resultado: %d \n", item_get_chave(i1), avl_remove(arvo1,i1));
-   //printf("num de elem da arvo : %d \n", avl_num_elem(arvo1));
-   avl_remove(arvo1,i1);
-   printf("a remocao do item %d tem esse resultado: %d \n", item_get_chave(i1), avl_remove(arvo1,i1));
-   avl_inserir(arvo1,i4);
-   avl_imprime(arvo1);
-   int* novo_vetor = avl_para_vetor(arvo1);
-   //printf("num de elem da arvo : %d \n", avl_num_elem(arvo1));
-   //printf("\n");
-   for (int i = 0; i < avl_num_elem(arvo1); i++){
-     // printf("%d ", novo_vetor[i]);
-   } */
+*/

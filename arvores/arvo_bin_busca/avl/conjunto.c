@@ -31,13 +31,18 @@ conjun* conjun_criar(void){
 } 
 
 bool conjun_add_item(conjun * C1, ITEM* item){
-    if(!C1)
-       return false;
+    if(!C1){
+      //printf("conjunto nulo");
+      return false;
+    }
+   // printf("vai entrar no if \n");
     if(avl_inserir(C1->arvo_elem,item)){
+      //  printf("entrou no if \n");
         C1->num_elem++;
         return true;
     }
-        return false;
+    //printf("false normal msm");
+    return false;
 }
 
 conjun* conjun_intersec(conjun* C1,  conjun* C2){
@@ -87,12 +92,13 @@ conjun* conjun_uniao(conjun* C1, conjun* C2){
     if(!C1 || !C2)
        exit(1);
 
-    conjun* novo_conjun =conjun_criar();
+    conjun* novo_conjun = conjun_criar();
 
     int *vetor1 = avl_para_vetor(C1->arvo_elem);
     int *vetor2 = avl_para_vetor(C2->arvo_elem);
     ITEM* novo_item;
     int novo_num_elem = C1->num_elem;
+   // printf("C1 tem %d items \n", C1->num_elem);
     for (int i = 0; i < C1->num_elem ; i++){
       novo_item = item_criar(vetor1[i]);
       conjun_add_item(novo_conjun,novo_item);
@@ -102,6 +108,7 @@ conjun* conjun_uniao(conjun* C1, conjun* C2){
       novo_item = item_criar(vetor2[i]);
       if(!conjun_pertence(novo_conjun, novo_item)){
         conjun_add_item(novo_conjun,novo_item);
+    //    printf("novo elemento vindo de C2 : %d \n", item_get_chave(novo_item));
         novo_num_elem++;
       }     
     }
@@ -113,12 +120,12 @@ conjun* conjun_uniao(conjun* C1, conjun* C2){
 
 void conjun_apaga(conjun** C1){
     if(!(*C1)){
-      printf("conjunto null");
-         return;
+     // printf("conjunto null");
+      return;
     }
     
     avl_apagar_arvore(&((*C1)->arvo_elem));
-    printf(" apagou arvo ");
+    //printf(" apagou arvo ");
     free(*C1);
     *C1 = NULL;
 }

@@ -41,20 +41,19 @@ NO* avl_acha_maior(AVL* arvo){
     return *acha_maior_aux( (&(arvo->raiz)) );
 }
 
-void avl_imprime_aux(NO* no_atual, int profun){
+void avl_imprime_aux(NO* no_atual){
     if(no_atual)
-       printf("item: %d com profundidade %d // ", item_get_chave(no_atual->item), profun);
+       printf("%d, ", item_get_chave(no_atual->item));
     else 
       return;
-    avl_imprime_aux(no_atual->dir, profun+1);
-    avl_imprime_aux(no_atual->esq, profun+1);
+    avl_imprime_aux(no_atual->dir);
+    avl_imprime_aux(no_atual->esq);
 }
 
 void avl_imprime(AVL* arvo){
-    if(arvo->raiz){
-      int profundidade = 0;
-      avl_imprime_aux(arvo->raiz, profundidade);
-    }else
+    if(arvo->raiz)
+      avl_imprime_aux(arvo->raiz);
+    else
         printf("vazio");
     printf("\n");
 }
@@ -93,10 +92,11 @@ NO* avl_busca_no(NO* no_atual, ITEM* item){
     }
 }
 
-bool aux_avl_busca(NO* no_atual, ITEM* item){
+/*bool aux_avl_busca(NO* no_atual, ITEM* item){
     if(!no_atual)
        return false;
     int valor_buscado = item_get_chave(item);
+    printf("valor buscado %d\n");
     int valor_atual = item_get_chave(no_atual->item);
     
     if(valor_atual == valor_buscado)
@@ -112,6 +112,29 @@ bool aux_avl_busca(NO* no_atual, ITEM* item){
             return false;
         else
             return  avl_busca_no(no_atual->dir, item);
+    }
+} */
+
+bool aux_avl_busca(NO* no_atual, ITEM* item){
+    if(!no_atual)
+       return false;
+    int valor_buscado = item_get_chave(item);
+   // printf("valor buscado %d\n", valor_buscado);
+    int valor_atual = item_get_chave(no_atual->item);
+    
+    if(valor_atual == valor_buscado)
+       return true;
+
+    if(valor_atual > valor_buscado){
+        if(!no_atual->esq)
+           return false;
+        else
+           return aux_avl_busca(no_atual->esq,item);
+    }else{
+        if(!no_atual->dir)
+            return false;
+        else
+            return  aux_avl_busca(no_atual->dir, item);
     }
 }
 
@@ -193,11 +216,13 @@ NO* rotacao_esq(NO* desbalan){
 }
 
 NO* rotacao_esq_dir(NO* desbalan){
-    return rotacao_dir(rotacao_esq(desbalan->esq));
+    desbalan->esq = rotacao_esq(desbalan->esq);  //o filho de desbalanca que vai receber o novo no balanceado
+    return rotacao_dir(desbalan);  //aplica a segunda rotacao
 }
 
 NO* rotacao_dir_esq(NO* desbalan){
-    return rotacao_esq(rotacao_dir(desbalan->dir));
+    desbalan->dir = rotacao_dir(desbalan->dir);
+    return rotacao_esq(desbalan);
 }
 
 NO* avl_insere_no(NO* raiz, NO* novo_no){

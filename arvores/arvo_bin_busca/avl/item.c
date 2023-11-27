@@ -13,7 +13,9 @@ ITEM *item_criar(int chave){
           ITEM *item;
           
           item = (ITEM *) malloc(sizeof(ITEM));
-          
+              if(!item){
+               printf("problemas no item \n");
+              }
           if (item != NULL){
              item->chave = chave;
              return(item);
