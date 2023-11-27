@@ -59,7 +59,7 @@ int main(){
    ITEM* novo_item_pertence;
    conjun* temp_conjun_uniao;
    int input_pertence;
-   
+
    case PERTENCE:
       scanf("%d", &input_pertence);
       novo_item_pertence = item_criar(input_pertence);  //ver se vale a pena manter como item, talvez sim devido a ficar capaz de ser usado com varios data typess
@@ -67,13 +67,13 @@ int main(){
          printf("pertence");
       else
          printf("nao pertence");
-      free(novo_item_pertence); //dando  free no novo item criado para busca apenas 
+      item_apagar(&novo_item_pertence); //apagando o novo item criado para busca apenas 
    break;
 
    case UNIAO:
       temp_conjun_uniao =  conjun_uniao(C1,C2); //novo conjunto gerado pela uniao de C1 e C2
       conjun_imprime(temp_conjun_uniao);
-      free(temp_conjun_uniao); //dando free no novo conjunto que ja foi usado para impressao
+      conjun_apaga(&temp_conjun_uniao); //apagando o novo conjunto que ja foi usado para impressao
    break;
 
    default:
@@ -83,5 +83,4 @@ int main(){
  
    conjun_apaga(&C1);  //dar free na memoria dos conjuntos bases
    conjun_apaga(&C2);
-
 }
