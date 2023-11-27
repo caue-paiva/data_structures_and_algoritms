@@ -14,7 +14,7 @@ void set_remove(set* s, int* remo_arr, int arr_size){
 
    for (int i = 0; i < s->size; i++){
        int should_remove = 0;
-       for (int k = 0; k < arr_size; k++){
+       for (int k = 0; k < arr_size; k++){   //talvez implementar busca binária aqui?
            if (s->arr[i] == remo_arr[k]){
                should_remove = 1;
                break;
@@ -33,8 +33,7 @@ void set_remove(set* s, int* remo_arr, int arr_size){
 
 
 int set_included(set * S1, int num){
-   
-   for (int i = 0; i < (S1->size); i++){
+   for (int i = 0; i < (S1->size); i++){ //otimizar com busca binária ou com ABB
         if (S1->arr[i] == num)
             return 1;
    }   
@@ -48,7 +47,6 @@ set* set_create(int *arra, int arr_size){
      new_set->size = 0;
      for (int i = 0; i < arr_size; i++){ 
         if (!set_included(new_set, arra[i])){
-       
             new_set->arr[new_set->size] = arra[i];
             new_set->size++;
         }

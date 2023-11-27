@@ -1,5 +1,5 @@
 all: avl.o conjunto.o main_projeto.o item.o
-	gcc -o main_projeto.exe  avl.o conjunto.o main_projeto.o item.o
+	gcc -o main_projeto  avl.o conjunto.o main_projeto.o item.o
 
 avl.o: avl.c item.o
 	gcc -c avl.c
@@ -13,5 +13,8 @@ main_projeto.o: main_projeto.c avl.o item.o
 item.o: item.c
 	gcc -c item.c
 
-clean:
+clean_lin:
+	rm -f *.o *.out
+
+clean_win:
 	del *.exe *.o 

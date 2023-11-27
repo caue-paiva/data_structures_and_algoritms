@@ -1,8 +1,8 @@
 #include "conjunto.h"
 
 struct conjun_{
-    AVL* arvo_elem;
-    int num_elem;
+    AVL* arvo_elem;  //conjunto é composto por uma AVL, que guarda seus elementos
+    int num_elem;  //e uma var int para guardar quantos elementos ele tem, util para algumas operacoes 
 };
 
 bool conjun_remove(conjun* C1, ITEM* item){
@@ -46,17 +46,20 @@ bool conjun_add_item(conjun * C1, ITEM* item){
 }
 
 conjun* conjun_intersec(conjun* C1,  conjun* C2){
-     if (!C1 || !C2)
-         printf("quitando programa");
-    conjun* novo_conjunto = conjun_criar();
+    if (!C1 || !C2){
+       printf("operecao de intersec invalida \n"); //como nesse caso ums dos conjuntos realmente nao existe (nao somente esta vazio) e uma opera invalida
+       exit(1);
+    }
+
+    conjun* novo_conjunto = conjun_criar(); //cria novo conjunto para ser retornado
          
-    if(!C1->arvo_elem || !C2->arvo_elem || C1->num_elem == 0 || C2->num_elem == 0) //se um dos conjuntos estiver vazio retorna um novo conjunto vazio
+    if(!C1->arvo_elem || !C2->arvo_elem || C1->num_elem == 0 || C2->num_elem == 0) //se um dos conjuntos estiver vazio retorna um novo conjunto vazio 
         return novo_conjunto;
      
     conjun* maior_conjun;
     conjun* menor_conjun;
     int tam_novo_conjun = 0;
-    if(C1->num_elem > C2->num_elem){
+    if(C1->num_elem > C2->num_elem){ //acha qual é o conjunto com mais elementos, isso é usado na otimizacao da operacao
         maior_conjun = C1;
         menor_conjun = C2;
     }else{
@@ -64,73 +67,72 @@ conjun* conjun_intersec(conjun* C1,  conjun* C2){
         menor_conjun = C1;
     }
 
-    int* vetor_menor_conjunto = avl_para_vetor(menor_conjun->arvo_elem);
-    if(!vetor_menor_conjunto)
+    int* vetor_menor_conjunto = avl_para_vetor(menor_conjun->arvo_elem); //vetor auxiliar para conter os elementos as avl que vao ser usados na opera
+    if(!vetor_menor_conjunto){
+       printf("operecao de intersec invalida \n"); //checar se o vetor retornado n e null
        exit(1);
+    }
     ITEM* item_atual;      
-  //é mais eficiente loopar no menor conjunto e busca se os seus elementos existem no maior
+    //é mais eficiente loopar no menor conjunto e buscar se os seus elementos existem no maior
     for (int i = 0; i < menor_conjun->num_elem ; i++){
         item_atual = item_criar(vetor_menor_conjunto[i]);//achar um jeito de "ITERAR" pela AVL e pegar todos elementos
-        if(conjun_pertence(maior_conjun, item_atual)){
+        if(conjun_pertence(maior_conjun, item_atual)){ //se o numero estiver nos 2 conjuntos, ele sera adicionado na intersec deles
            conjun_add_item(novo_conjunto,item_atual);
-           tam_novo_conjun++;
+           tam_novo_conjun++; //guarda o tamanho do novo conjunto
+        }else{
+          item_apagar(&item_atual); //se a operacao de inserir esse item no novo conjun falhar, apagamos ele
         }
                
     }      
-    free(vetor_menor_conjunto);
-    novo_conjunto->num_elem = tam_novo_conjun;
+    free(vetor_menor_conjunto); //libera o vetor aux
+    novo_conjunto->num_elem = tam_novo_conjun; //coloca o tamanho do novo conjunto
     return novo_conjunto;
 }
 
 void conjun_imprime(conjun* C1){
      if(!C1)
        return;
-     avl_imprime(C1->arvo_elem);
+     avl_imprime(C1->arvo_elem);  //chama funcao de imprimir arvore
 }
 
 conjun* conjun_uniao(conjun* C1, conjun* C2){
     if(!C1 || !C2)
        exit(1);
 
-    conjun* novo_conjun = conjun_criar();
+    conjun* novo_conjun = conjun_criar(); //aloca uma novo conjunto que vai ser retornado pela opera
 
-    int *vetor1 = avl_para_vetor(C1->arvo_elem);
+    int *vetor1 = avl_para_vetor(C1->arvo_elem); //vetores aux para guardar os valores dos conjuntos e fazer as operacoes
     int *vetor2 = avl_para_vetor(C2->arvo_elem);
-    ITEM* novo_item;
+    ITEM* novo_item; //item aux para fazer a busca
     int novo_num_elem = C1->num_elem;
-   // printf("C1 tem %d items \n", C1->num_elem);
     for (int i = 0; i < C1->num_elem ; i++){
-      novo_item = item_criar(vetor1[i]);
+      novo_item = item_criar(vetor1[i]);   //coloca todos os items de C1 no novo conjunto
       conjun_add_item(novo_conjun,novo_item);
     }
 
     for (int i = 0; i < C2->num_elem ; i++){
       novo_item = item_criar(vetor2[i]);
       if(!conjun_pertence(novo_conjun, novo_item)){
-        conjun_add_item(novo_conjun,novo_item);
-    //    printf("novo elemento vindo de C2 : %d \n", item_get_chave(novo_item));
-        novo_num_elem++;
-      }     
+          conjun_add_item(novo_conjun,novo_item);  //se os elementos de C2 nao forem repetidos, coloca eles tbm
+          novo_num_elem++;
+      }else
+        item_apagar(&novo_item); //apagar o item criado para busca
     }
-    free(vetor1);
+    free(vetor1); //libera os vetores auxiliares usados na operacao
     free(vetor2);
-    novo_conjun->num_elem = novo_num_elem;
+    novo_conjun->num_elem = novo_num_elem; //novo conjun tem um novo num de elementos
     return novo_conjun;
 }
 
 void conjun_apaga(conjun** C1){
-    if(!(*C1)){
-     // printf("conjunto null");
-      return;
-    }
-    
-    avl_apagar_arvore(&((*C1)->arvo_elem));
-    //printf(" apagou arvo ");
-    free(*C1);
-    *C1 = NULL;
+    if(!(*C1))
+      return; 
+    avl_apagar_arvore(&((*C1)->arvo_elem)); //apaga a arvore do conjunto
+    free(*C1); //libera memoria alocada para o tad conjunto em si
+    *C1 = NULL; //ponteiro fica null
 }
 
-int conjun_tamanho(conjun* C1){
+int conjun_tamanho(conjun* C1){ //retorna o tam/num elementos de um conjunto, se ele n for null
   if(!C1)
     return -1;
   return C1->num_elem;
