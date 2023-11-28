@@ -1,5 +1,5 @@
 #include "avl.h"
-#define max(a,b) ((a>b) ? a: b)
+#define max(a,b) ((a>b) ? a: b)  //macro para comparacao entre dois valores
 
 
 struct no_H {
