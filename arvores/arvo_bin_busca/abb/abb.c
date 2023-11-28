@@ -37,6 +37,32 @@ NO** abb_acha_maior(NO** raiz){
         return abb_acha_maior( &((*raiz)->dir));
 }
 
+/*
+Essa funcao e uma sobra de codigo da AVL, vou deixar aqui caso precise dps
+
+*/
+NO* avl_busca_no(NO* no_atual, ITEM* item){ //funcao que busca um no que tenha um certo item
+    if(!no_atual)
+       return false;  
+    int valor_buscado = item_get_chave(item);
+    int valor_atual = item_get_chave(no_atual->item);  //pega os valores atuais e buscados 
+    
+    if(valor_atual == valor_buscado) //achamos o valor que buscamos
+       return no_atual;
+
+    if(valor_atual > valor_buscado){
+        if(!no_atual->esq)  //se o valor atual for maior que o buscado, vai para esquerda
+           return NULL;
+        else
+           return avl_busca_no(no_atual->esq,item);
+    }else{
+        if(!no_atual->dir)  //se o valor atual for menor que o buscado, vai para dir
+            return NULL;
+        else
+            return  avl_busca_no(no_atual->dir, item);
+    }
+}
+
 void abb_imprime_aux(NO* no_atual){
     if(no_atual)
        printf(" %d", item_get_chave(no_atual->item));
