@@ -3,7 +3,7 @@
 
 
 struct no_H {
-    ITEM  *item;
+    ITEM  *item;  //struct do no, contendo um item, nos dir e esq e sua altura
     NO *esq;
     NO *dir;
     int altura;
@@ -11,12 +11,12 @@ struct no_H {
 
 struct avl{
     NO *raiz;
-    int profundidade;
-    int num_elem;
+    int profundidade;  //struct avl com a raiz, num de elementos e profundidade
+    int num_elem;  //num de elem e uma variavel util para varias operacoes, incluindo as de conjuntos
 };
 
 NO** acha_menor_aux(NO** raiz){
-    if(!(raiz) || !(*raiz) )
+    if(!(raiz) || !(*raiz) )  //acha o menor valor na arvore ou sub-arvore
        return NULL;    
     if(!(*raiz)->esq)
         return raiz;
@@ -25,10 +25,10 @@ NO** acha_menor_aux(NO** raiz){
 }
 
 NO* avl_acha_menor(AVL* arvo){
-    return *acha_menor_aux( (&(arvo->raiz)) );
+    return *acha_menor_aux( (&(arvo->raiz)) );  //wrapper function na acha menor aux, melhor usabilidade
 }
 
-NO** acha_maior_aux(NO** raiz){
+NO** acha_maior_aux(NO** raiz){ //acha o maior valor na arvore ou sub-arvore
     if(!(raiz) || !(*raiz) )
        return NULL;    
     if(!(*raiz)->esq)
@@ -37,7 +37,7 @@ NO** acha_maior_aux(NO** raiz){
         return acha_maior_aux( &((*raiz)->dir));
 }
 
-NO* avl_acha_maior(AVL* arvo){
+NO* avl_acha_maior(AVL* arvo){   //wrapper function na acha maior aux, melhor usabilidade
     return *acha_maior_aux( (&(arvo->raiz)) );
 }
 
@@ -46,12 +46,12 @@ void avl_imprime_aux(NO* no_atual){
        printf("%d, ", item_get_chave(no_atual->item));
     else 
       return;
-    avl_imprime_aux(no_atual->dir);
+    avl_imprime_aux(no_atual->dir);  //funcao auxiliar de imprimir todos os elementos da arvore
     avl_imprime_aux(no_atual->esq);
 }
 
 void avl_imprime(AVL* arvo){
-    if(arvo->raiz)
+    if(arvo->raiz)  // wrapper function da imprime aux para ser usada pelo user (
       avl_imprime_aux(arvo->raiz);
     else
         printf("vazio");
@@ -59,7 +59,7 @@ void avl_imprime(AVL* arvo){
 }
 
 void troca_max_esq(NO *troca, NO *raiz, NO *ant){
-    if(troca->dir != NULL){
+    if(troca->dir != NULL){  //funcao que acha o maior elemento da sub-arvore a esquerda de um no, usada na func de remocao
         troca_max_esq(troca->dir, raiz, troca);
         return;
     }
@@ -70,86 +70,40 @@ void troca_max_esq(NO *troca, NO *raiz, NO *ant){
     troca = NULL;
 }
 
-NO* avl_busca_no(NO* no_atual, ITEM* item){
+bool aux_avl_busca(NO* no_atual, ITEM* item){ //funcao que busca um no que tenha um certo item
     if(!no_atual)
        return false;
     int valor_buscado = item_get_chave(item);
-    int valor_atual = item_get_chave(no_atual->item);
+    int valor_atual = item_get_chave(no_atual->item); //pega os valores atuais e buscados
     
-    if(valor_atual == valor_buscado)
-       return no_atual;
-
-    if(valor_atual > valor_buscado){
-        if(!no_atual->esq)
-           return NULL;
-        else
-           return avl_busca_no(no_atual->esq,item);
-    }else{
-        if(!no_atual->dir)
-            return NULL;
-        else
-            return  avl_busca_no(no_atual->dir, item);
-    }
-}
-
-/*bool aux_avl_busca(NO* no_atual, ITEM* item){
-    if(!no_atual)
-       return false;
-    int valor_buscado = item_get_chave(item);
-    printf("valor buscado %d\n");
-    int valor_atual = item_get_chave(no_atual->item);
-    
-    if(valor_atual == valor_buscado)
+    if(valor_atual == valor_buscado) //achamos o valor que buscamos
        return true;
 
     if(valor_atual > valor_buscado){
-        if(!no_atual->esq)
-           return false;
-        else
-           return avl_busca_no(no_atual->esq,item);
-    }else{
-        if(!no_atual->dir)
-            return false;
-        else
-            return  avl_busca_no(no_atual->dir, item);
-    }
-} */
-
-bool aux_avl_busca(NO* no_atual, ITEM* item){
-    if(!no_atual)
-       return false;
-    int valor_buscado = item_get_chave(item);
-   // printf("valor buscado %d\n", valor_buscado);
-    int valor_atual = item_get_chave(no_atual->item);
-    
-    if(valor_atual == valor_buscado)
-       return true;
-
-    if(valor_atual > valor_buscado){
-        if(!no_atual->esq)
+        if(!no_atual->esq) //se o valor atual for maior que o buscado, vai para esquerda
            return false;
         else
            return aux_avl_busca(no_atual->esq,item);
     }else{
-        if(!no_atual->dir)
+        if(!no_atual->dir) //se o valor atual for menor que o buscado, vai para dir
             return false;
         else
             return  aux_avl_busca(no_atual->dir, item);
     }
 }
 
-bool avl_busca_item(AVL* arv, ITEM* item){
+bool avl_busca_item(AVL* arv, ITEM* item){ //funcao usada pelo user que chama a funcao aux_busca
     if(!arv)
       return false;
     return aux_avl_busca(arv->raiz, item);
 }
      
-NO* avl_busca_pai(NO* raiz, ITEM* procurado){
+NO* avl_busca_pai(NO* raiz, ITEM* procurado){ //funcao para buscar um pai de um no, nao utilizada nas outras funcoes da AVL, mas implementada para outras funcionalidades futuras
     if(!raiz ||item_get_chave(raiz->item) == item_get_chave(procurado)) // nesse caso a raiz é o item, não tem pai
        return NULL;
     
     if(item_get_chave(raiz->item) < item_get_chave(procurado)) {
-        if(raiz->dir){
+        if(raiz->dir){  //se o item procurado for maior, vai para dir
             if (item_get_chave(raiz->dir->item) == item_get_chave(procurado)){
                 return raiz;
             }else
@@ -159,7 +113,7 @@ NO* avl_busca_pai(NO* raiz, ITEM* procurado){
     }
 
     if(item_get_chave(raiz->item) > item_get_chave(procurado)) {
-        if(raiz->esq){
+        if(raiz->esq){  //se o item procurado for maior, vai para esque
             if (item_get_chave(raiz->esq->item) == item_get_chave(procurado)){
                 return raiz;
             }else
@@ -169,12 +123,12 @@ NO* avl_busca_pai(NO* raiz, ITEM* procurado){
     }
 }
 
-void apagar_arvore(NO **raiz){
+void apagar_arvore(NO **raiz){  //funcao auxiliar de apagar arvore
     if(*raiz){
-        apagar_arvore(&((*raiz)->esq));
+        apagar_arvore(&((*raiz)->esq)); //chama a funcao recursivamente para todos os nos da arvore
         apagar_arvore(&((*raiz)->dir));
         item_apagar(&((*raiz)->item));
-        free(*raiz);
+        free(*raiz); //da free e seta aquele ponteiro como NULL
         *raiz = NULL;
     }
 }
@@ -185,7 +139,7 @@ NO *avl_criar_no(ITEM *item){
            exit(1);
     no->item = item;
     no->altura = 0;
-    no->esq = NULL;
+    no->esq = NULL;  //cria um no e configura suas variaveis como seus valores iniciais
     no->dir = NULL;
     return (no);
 }
@@ -193,24 +147,24 @@ NO *avl_criar_no(ITEM *item){
 int avl_altura_no(NO* no){
     if(!no) 
        return -1;
-    else
+    else //funcao que retorna a altura de um no
       return no->altura;
 }
 
 NO* rotacao_dir(NO* desbalan){
     NO* nova_raiz = desbalan->esq;
-    desbalan->esq = nova_raiz->dir;
+    desbalan->esq = nova_raiz->dir;  //funcao que implementa a rotacao para direita
     nova_raiz->dir = desbalan;
-    desbalan->altura = max(avl_altura_no(desbalan->esq), avl_altura_no(desbalan->dir)) + 1;
+    desbalan->altura = max(avl_altura_no(desbalan->esq), avl_altura_no(desbalan->dir)) + 1; //calcula novas alturas
     nova_raiz->altura = max(avl_altura_no(nova_raiz->esq), avl_altura_no(nova_raiz->dir)) + 1;
     return nova_raiz;
 }
 
 NO* rotacao_esq(NO* desbalan){
     NO* nova_raiz = desbalan->dir;
-    desbalan->dir = nova_raiz->esq;
+    desbalan->dir = nova_raiz->esq; //funcao que implementa a rotacao para esquerda
     nova_raiz->esq = desbalan;
-    desbalan->altura = max(avl_altura_no(desbalan->esq), avl_altura_no(desbalan->dir)) + 1;
+    desbalan->altura = max(avl_altura_no(desbalan->esq), avl_altura_no(desbalan->dir)) + 1; //calcula novas alturas
     nova_raiz->altura = max(avl_altura_no(nova_raiz->esq), avl_altura_no(nova_raiz->dir)) + 1;
     return nova_raiz;
 }
@@ -221,48 +175,52 @@ NO* rotacao_esq_dir(NO* desbalan){
 }
 
 NO* rotacao_dir_esq(NO* desbalan){
-    desbalan->dir = rotacao_dir(desbalan->dir);
-    return rotacao_esq(desbalan);
+    desbalan->dir = rotacao_dir(desbalan->dir);  //o filho de desbalanca que vai receber o novo no balanceado
+    return rotacao_esq(desbalan); //aplica a segunda rotacao
 }
 
-NO* avl_insere_no(NO* raiz, NO* novo_no){
-    if(!raiz)
+NO* avl_insere_no(NO* raiz, NO* novo_no){  //funcao auxiliar que insere um nó e aplica rotacoes
+    if(!raiz)  //se o no for null, insere ele aqui
         raiz = novo_no;
-    else if(item_get_chave(novo_no->item) < item_get_chave(raiz->item))
+    else if(item_get_chave(novo_no->item) < item_get_chave(raiz->item))  //percorre a arvore, se for um item maior doq o que vamos inserir, vamos para esquerda
           raiz->esq = avl_insere_no(raiz->esq,novo_no);
-    else if (item_get_chave(novo_no->item) > item_get_chave(raiz->item))
+    else if (item_get_chave(novo_no->item) > item_get_chave(raiz->item)) //percorre a arvore, se for um item menor doq o que vamos inserir, vamos para direita
           raiz->dir =  avl_insere_no(raiz->dir,novo_no);
 
-    raiz->altura = max(avl_altura_no(raiz->esq), avl_altura_no(raiz->dir)) + 1;
+    raiz->altura = max(avl_altura_no(raiz->esq), avl_altura_no(raiz->dir)) + 1; //atualiza a altura do no 
     
-    if((avl_altura_no(raiz->esq)- avl_altura_no(raiz->dir)) == 2)
-        if(item_get_chave(novo_no->item) > item_get_chave(raiz->esq->item))
+    if((avl_altura_no(raiz->esq)- avl_altura_no(raiz->dir)) == 2)  //checa se o fator de desbalanceamento é 2 e se for, aplica rotacao
+        if(item_get_chave(novo_no->item) > item_get_chave(raiz->esq->item))  //verifica se pprecisa fazer uma rotacao dupla ou nao
            raiz = rotacao_esq_dir(raiz);
         else
           raiz = rotacao_dir(raiz);
-    if((avl_altura_no(raiz->esq)- avl_altura_no(raiz->dir)) == -2)
-        if(item_get_chave(novo_no->item) < item_get_chave(raiz->dir->item))
+    if((avl_altura_no(raiz->esq)- avl_altura_no(raiz->dir)) == -2) //checa se o fator de desbalanceamento é -2  e se for, aplica rotacao
+        if(item_get_chave(novo_no->item) < item_get_chave(raiz->dir->item)) //verifica se pprecisa fazer uma rotacao dupla ou nao
            raiz = rotacao_dir_esq(raiz);
         else
           raiz = rotacao_esq(raiz);
 
-    return raiz;        
+    return raiz;        //retorna o no modificado dps da remocao e rotacao
 }
 
 bool avl_inserir(AVL* arvo, ITEM* item){
-    if(!arvo)
+    if(!arvo){
+      printf("arvore nao existe \n"); //msg de erro avisando que a arv n existe
       return false;
-    if(avl_busca_item(arvo,item)) 
+    }
+    if(avl_busca_item(arvo,item)){
+       printf("esse item ja existe\n");  //msg de erro avisando o user que o elemento ja existe na árvore
        return false;
-    NO* novo_no = avl_criar_no(item);
-    arvo->raiz = avl_insere_no(arvo->raiz,novo_no);
-    (arvo->num_elem)++;
+    } 
+    NO* novo_no = avl_criar_no(item);  //cria um novo no
+    arvo->raiz = avl_insere_no(arvo->raiz,novo_no);  //chama a funcao aux de inserir
+    (arvo->num_elem)++; //aumenta o numero de elementos na arvore
     arvo->profundidade = max( avl_altura_no(arvo->raiz->dir), avl_altura_no(arvo->raiz->esq) )+1; //muda a profudidade da arvore
     return true;
 }
 
 AVL *avl_criar(void){
-    AVL *arv = (AVL*) malloc(sizeof(AVL));
+    AVL *arv = (AVL*) malloc(sizeof(AVL)); //essa funcao cria uma AVL, configura seus parametros iniciais e retorna ela
     if(!arv)
        exit(1);
     arv->raiz = NULL;
@@ -271,13 +229,13 @@ AVL *avl_criar(void){
     return (arv);
 }
 
-void avl_apagar_arvore(AVL **T){
+void avl_apagar_arvore(AVL **T){ //funcao que o usuario tem acesso para apagar um arvore, chama a funcao aux de apagar
     apagar_arvore(&(*T)->raiz);
     free(*T);
     *T = NULL;
 }
 
-NO* remove_arvo(NO** raiz, ITEM* item){
+NO* remove_arvo(NO** raiz, ITEM* item){  //funcao auxiliar que remove um item da arvore e aplica rotacoes se precisar
     if(!(*raiz))  //no é nulo
       return NULL;
 
@@ -299,16 +257,17 @@ NO* remove_arvo(NO** raiz, ITEM* item){
        (*raiz)->esq = remove_arvo(&(*raiz)->esq, item); //se o valor buscado for menor vamos para esq
 
 
+    //rotina de rotacao, similar a na insercao
     if (*raiz){
      (*raiz)->altura = max( avl_altura_no((*raiz)->dir), avl_altura_no((*raiz)->esq ) )+1;  //coloca a nova altura da arvore
 
-        if((avl_altura_no((*raiz)->esq) - avl_altura_no((*raiz)->dir)) == 2)
+        if((avl_altura_no((*raiz)->esq) - avl_altura_no((*raiz)->dir)) == 2)  //verifica o fator de balanceamento para ver se precisa de rotacao
            if((avl_altura_no((*raiz)->esq->esq) - avl_altura_no((*raiz)->esq->dir)) >= 0 )  //verifica o sinal do filho para ver se precisa de rota dupla
               (*raiz) = rotacao_dir((*raiz));
            else
               (*raiz) = rotacao_esq_dir((*raiz));
              
-        if((avl_altura_no((*raiz)->esq)- avl_altura_no((*raiz)->dir)) == -2)  //rotina de rotacao, similar a na insercao
+        if((avl_altura_no((*raiz)->esq)- avl_altura_no((*raiz)->dir)) == -2)  //verifica o fator de balanceamento
           if( (avl_altura_no((*raiz)->dir->esq) - avl_altura_no((*raiz)->dir->dir)) <= 0 ) 
                (*raiz) = rotacao_esq((*raiz));
            else
@@ -319,17 +278,19 @@ NO* remove_arvo(NO** raiz, ITEM* item){
     }
 }
 
-bool avl_remove(AVL*arv, ITEM* item){
+bool avl_remove(AVL*arv, ITEM* item){  //funcao usada pelo user para remover da avl
     if(!arv)
       return false;
-    if(!avl_busca_item(arv,item))
+    if(!avl_busca_item(arv,item)){ //se o item nao existe, a operacao e invalida
+      printf("esse item nao existe \n");
       return false;
-    NO* nova_raiz = remove_arvo(&(arv->raiz),item);
+    }  
+    NO* nova_raiz = remove_arvo(&(arv->raiz),item);  //nova raiz é retornada da operacao
     if(!nova_raiz)
       return false;
     else{
-        arv->raiz = nova_raiz;
-        (arv->num_elem)--;
+        arv->raiz = nova_raiz; //coloca nova raiz
+        (arv->num_elem)--; //reduz o numero de elementos da arvore
         arv->profundidade = max( avl_altura_no(nova_raiz->dir), avl_altura_no(nova_raiz->esq ) )+1; //muda a profudidade da arvore
         return true;
     }
@@ -337,25 +298,28 @@ bool avl_remove(AVL*arv, ITEM* item){
 
 int avl_profundidade(AVL* arv){
     if(!arv)
-      return -2;
+      return -2; //se a arvore em si n existe , retorna -2
     if(!arv->raiz)
-      return -1;
-    return ( max(avl_altura_no(arv->raiz->dir), avl_altura_no(arv->raiz->esq)) +1);
+      return -1; //se o no raiz n existe, retorna -1
+    return arv->profundidade;  //retorna prof max  arvore
 }
 
 int avl_num_elem(AVL* arv){
     if(!arv)
       return -1;
-    return arv->num_elem;
+    return arv->num_elem; //retorna o num de elementos na arvore
 }
 
-void vetor_avl_aux(int* vetor, NO* no_atual, NO* raiz_da_arvo){ //variavel para a raiz da arvore para comparaca
+//essa funcao extrai os conteudos de um AVL e coloca eles num vetor, esse vetor e usado em operacoes, por ser mais facil de ser manipulado e acessar seus elementos
+//essa funcao realiza apenas uma iteracao sobre todos os elementos da arvore, sendo O(N), eficiente pois temos que mover interagir com N elementos de qualquer jeito
+
+void vetor_avl_aux(int* vetor, NO* no_atual, NO* raiz_da_arvo){ //temos uma variavel para a raiz da arvore para comparacao  e dizer se chegamos no final da volta da recursao
     if(!no_atual || !raiz_da_arvo)
        return;
     static int index_atual = 0; //essa variavel static mantem conta de qual index do vetor vamos inserir cada elemento
     int elemento_arvore = item_get_chave(no_atual->item);
     vetor[index_atual] = elemento_arvore;
-    index_atual++;
+    index_atual++; //insere o elemento no index e incrementa ele
 
     vetor_avl_aux(vetor, no_atual->dir, raiz_da_arvo);
     vetor_avl_aux(vetor, no_atual->esq, raiz_da_arvo);
@@ -364,12 +328,12 @@ void vetor_avl_aux(int* vetor, NO* no_atual, NO* raiz_da_arvo){ //variavel para 
         index_atual = 0;
 }
 
-int* avl_para_vetor(AVL*arv){ //justificar por que escolher essa forma de iterar na AVL
+int* avl_para_vetor(AVL*arv){ //funcao disponivel para o usuario para extrair os elementos de uma AVL para um vetor
     if(!arv || ! arv->raiz)
        return NULL;
-    int* novo_vetor = (int*) malloc (sizeof(int) * (arv->num_elem));
+    int* novo_vetor = (int*) malloc (sizeof(int) * (arv->num_elem)); //aloca um novo vetor de N elementos
     if(!novo_vetor)
        return NULL; //essa funcao precisa ser null checada ao ser usada
-    vetor_avl_aux(novo_vetor, arv->raiz, arv->raiz);
+    vetor_avl_aux(novo_vetor, arv->raiz, arv->raiz); //copia os elementos para esse novo vetor
     return novo_vetor;
 }

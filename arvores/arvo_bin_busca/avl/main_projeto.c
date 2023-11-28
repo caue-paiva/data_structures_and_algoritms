@@ -58,7 +58,6 @@ int main(){
     scanf("%d", &input_val1);
     item_temp_input = item_criar(input_val1); //escaneia o input do usuario e cria um item para inserir
     if (!conjun_add_item(C1, item_temp_input)){
-      printf("erro na insercao do item \n");
       free(item_temp_input); //caso a insercao falhe, precisamos dar free no item alocado
     }
  }
@@ -67,7 +66,6 @@ int main(){
     scanf("%d", &input_val1);
     item_temp_input = item_criar(input_val1);
     if (!conjun_add_item(C2, item_temp_input)){
-      printf("erro na insercao do item \n");
       free(item_temp_input);
     }
  }

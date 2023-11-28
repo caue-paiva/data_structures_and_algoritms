@@ -14,7 +14,7 @@ item.o: item.c
 	gcc -c item.c
 
 clean_lin:
-	rm -f *.o *.out
+	rm -f *.o main_projeto
 
 clean_win:
 	del *.exe *.o 
