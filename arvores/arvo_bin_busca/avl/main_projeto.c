@@ -49,7 +49,7 @@ int main(){
  int tam1, tam2, input_val1,temp;
  OPERACOES OP1;
  ITEM* item_temp_input;
- conjun* C1 = conjun_criar();
+ conjun* C1 = conjun_criar();  //cria os  2 conjuntos bases e pega o input do user de quantos elementos eles vao ter
  conjun* C2 = conjun_criar();
  scanf("%d",&tam1);
  scanf("%d",&tam2);

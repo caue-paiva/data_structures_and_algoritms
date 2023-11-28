@@ -23,25 +23,21 @@ bool conjun_pertence(conjun * C1, ITEM* item){
 
 conjun* conjun_criar(void){
     conjun* novo_conjun = (conjun*) malloc(sizeof(conjun));
-         if (!novo_conjun)
+         if (!novo_conjun)  //alloca um conjunto, seta suas variaveis iniciais e retorna
            exit(1);
     novo_conjun->num_elem = 0;
-    novo_conjun->arvo_elem = avl_criar();
+    novo_conjun->arvo_elem = avl_criar(); //cria uma AVL associada a esse conjunto
     return novo_conjun;
 } 
 
-bool conjun_add_item(conjun * C1, ITEM* item){
-    if(!C1){
-      //printf("conjunto nulo");
+bool conjun_add_item(conjun * C1, ITEM* item){ //chama a funcao inserir na AVL
+    if(!C1){ 
       return false;
     }
-   // printf("vai entrar no if \n");
-    if(avl_inserir(C1->arvo_elem,item)){
-      //  printf("entrou no if \n");
+    if(avl_inserir(C1->arvo_elem,item)){ //se a insercao for um sucesso retorna true
         C1->num_elem++;
         return true;
     }
-    //printf("false normal msm");
     return false;
 }
 
@@ -105,10 +101,12 @@ conjun* conjun_uniao(conjun* C1, conjun* C2){
     int *vetor2 = avl_para_vetor(C2->arvo_elem);
     ITEM* novo_item; //item aux para fazer a busca
     int novo_num_elem = C1->num_elem;
+
     for (int i = 0; i < C1->num_elem ; i++){
       novo_item = item_criar(vetor1[i]);   //coloca todos os items de C1 no novo conjunto
       conjun_add_item(novo_conjun,novo_item);
     }
+    free(vetor1); //libera o primeiro vetor, assim nao tem mais doq um vetor alocado ao mesmo tempo 
 
     for (int i = 0; i < C2->num_elem ; i++){
       novo_item = item_criar(vetor2[i]);
@@ -118,8 +116,7 @@ conjun* conjun_uniao(conjun* C1, conjun* C2){
       }else
         item_apagar(&novo_item); //apagar o item criado para busca
     }
-    free(vetor1); //libera os vetores auxiliares usados na operacao
-    free(vetor2);
+    free(vetor2); //libera o segundo vetor
     novo_conjun->num_elem = novo_num_elem; //novo conjun tem um novo num de elementos
     return novo_conjun;
 }
