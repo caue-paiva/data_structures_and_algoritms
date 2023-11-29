@@ -1,11 +1,11 @@
-#include "stdlib.h"
-#include "stdio.h"
+#include "stack_linkada.h"
 
-typedef struct no NO_;
 
-struct no {
-   int item;
+
+struct no_ {  //essa pilha tem nós 
+   NO* item;
    NO_* prox;
+   int teste;
 };
 
 struct pilha {
@@ -13,19 +13,18 @@ struct pilha {
    int tam;
 };
 
-typedef struct pilha PILHA_;
 
-int pilha_vazia(PILHA_*P1){
+int pilha_vazia(PILHA*P1){
    return (P1->tam == 0);
 }
 
 
-void inverte_pilha(PILHA_*P1){
+/*void inverte_pilha(PILHA*P1){
    if(pilha_vazia(P1) || P1->tam ==1 ){return;}
    NO_* ante=  NULL;
    NO_* atual = P1->topo;
    NO_* prox = atual->prox;
-   //printf("tam PILHA_ %d ", P1->tam);
+   //printf("tam PILHA %d ", P1->tam);
    int tam =  P1->tam;
    do
     {  
@@ -39,10 +38,10 @@ void inverte_pilha(PILHA_*P1){
    P1->topo =atual;
    
 }
+ */
 
-
-PILHA_* pilha_criar(void){
-    PILHA_* nova_pilha = (PILHA_*) malloc(sizeof(PILHA_));
+PILHA* pilha_criar(void){
+    PILHA* nova_pilha = (PILHA*) malloc(sizeof(PILHA));
            if(nova_pilha == NULL) { exit(1);}
     
     nova_pilha->topo = NULL;
@@ -51,7 +50,17 @@ PILHA_* pilha_criar(void){
     return nova_pilha;
 }
 
-NO_* no_criar(int item){
+/*PILHA* pilha_criar_valor(ITEM* item){
+    PILHA* nova_pilha = (PILHA*) malloc(sizeof(PILHA));
+         if(nova_pilha == NULL) { exit(1);}
+    
+    nova_pilha->topo->item = item;
+    nova_pilha->tam =0;
+
+    return nova_pilha;
+}*/
+
+NO_* no_criar(ITEM* item){
    NO_* N1 = (NO_*) malloc(sizeof(NO_));
      if (!N1) {exit(1);}
 
@@ -62,10 +71,10 @@ NO_* no_criar(int item){
 }
 
 
-int push(PILHA_* P1,int item){
+int pilha_push(PILHA* P1,NO* item){
    if(!P1){return 0;}
 
-   NO_* N1 = no_criar(item);
+  // NO_* N1 = no_criar(item);
 
    if(P1->topo){
       N1->prox = P1->topo;
@@ -77,38 +86,47 @@ int push(PILHA_* P1,int item){
    return 1; 
 }
 
-int pop(PILHA_*P1){
+ITEM* pilha_pop(PILHA*P1){
     if(pilha_vazia(P1)){exit(1);}
 
     NO_* N1= P1->topo;
     P1->topo =P1->topo->prox;
     --(P1->tam);
-
     return  N1->item;
 }
 
-int pilha_tam(PILHA_* P1){
+ITEM* pilha_topo(PILHA* P1){
+   if(!P1)
+     return NULL;
+   
+   return P1->topo->item;
+}
+
+int pilha_tam(PILHA* P1){
    return (P1->tam);
 }
 
-int lista_encad_apagar(NO_** NO_){
-   if(!(*NO_))
+int lista_encad_apagar(NO_** NO){
+   if(!(*NO)){
       return 0;
+   }
+
    NO_* prox;
    
-   while(*NO_)
+   while(*NO)
    {  
-      prox = (*NO_)->prox;
-      free(*NO_);
-      (*NO_) = prox;
+      prox = (*NO)->prox;
+      item_apagar(&(*NO)->item);
+      free(*NO);
+      (*NO) = prox;
      
    } ;
    
-   *NO_ = NULL;
+   *NO = NULL;
    return 1;
 }
 
-int pilha_apagar(PILHA_** P1){
+int pilha_apagar(PILHA** P1){
     if( !(*P1) )
       return 0;
    

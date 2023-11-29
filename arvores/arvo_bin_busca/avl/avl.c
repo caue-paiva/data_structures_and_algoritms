@@ -337,3 +337,86 @@ int* avl_para_vetor(AVL*arv){ //funcao disponivel para o usuario para extrair os
     vetor_avl_aux(novo_vetor, arv->raiz, arv->raiz); //copia os elementos para esse novo vetor
     return novo_vetor;
 }
+
+
+/*
+ITEM* aux_avl_retorna_valores( PILHA* pilha_atual, NO* raiz_arv){
+    static NO* no_atual;
+    static NO* prox_dir;
+
+    if(!no_atual &&  !prox_dir && pilha_tam(pilha_atual) == 0){
+         no_atual = raiz_arv;
+    }
+
+    while(no_atual){
+        pilha_push(pilha_atual, no_atual->item);
+      
+        if(no_atual->dir)
+             prox_dir = no_atual->dir;
+
+        no_atual = no_atual->esq;
+    }
+
+
+    if(pilha_tam(pilha_atual) > 0){
+       ITEM* item = pilha_pop(pilha_atual);
+       
+       if(no_atual->dir)
+          no_atual = no_atual->dir
+       else
+         
+      
+       return item;
+
+    } 
+
+    
+    
+    no_atual = NULL;
+    prox_dir =NULL;
+
+    return NULL;
+}
+
+ITEM* avl_retorna_valores(AVL*arv, PILHA* pilha){
+      if(!arv){
+        printf("arvore nula");
+        exit(1);
+      }
+
+      return aux_avl_retorna_valores(pilha, arv->raiz);
+}*/
+
+/*
+void avl_inicializa_percurso(AVL* avl, PILHA *pilha) {
+    NO *atual= avl->raiz;
+
+    // Push all the left children of the root onto the stack
+    while (atual) {
+        pilha_push(pilha,)
+        //stackPush(stack, current);
+        current = current->left;
+    }
+}
+
+// The function to get the next node in in-order
+Node* getNextInOrder(Stack *stack) {
+    if (stackIsEmpty(stack)) {
+        return NULL; // No more nodes to visit
+    }
+
+    Node *current = stackPop(stack); // Get the next node from the stack
+    Node *nodeToReturn = current; // This is the node we'll return
+
+    // If the popped node has a right child, push the right child and all its left children onto the stack
+    if (current->right != NULL) {
+        current = current->right;
+        while (current != NULL) {
+            stackPush(stack, current);
+            current = current->left;
+        }
+    }
+
+    return nodeToReturn;
+}
+*/

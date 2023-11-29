@@ -1,7 +1,7 @@
 #ifndef CONJUNTO_H
   #define CONJUNTO_H
   #include "avl.h"
-  
+
   typedef struct conjun_ conjun;
   bool conjun_remove(conjun* C1, ITEM* item);
   bool conjun_pertence(conjun * C1, ITEM* item);
