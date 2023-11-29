@@ -32,10 +32,8 @@ bool item_apagar(ITEM **item){ //apaga o item
 
 int item_get_chave(ITEM *item){ //retorna o valor presente no item
     if (item != NULL) {
-    //  printf(" item: %p", item);
       return(item->chave);
     }
-    printf("saindo do codigo");
     exit(1);
 }
 

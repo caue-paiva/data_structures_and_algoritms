@@ -29,7 +29,7 @@ int main(){
  int tam1, tam2, input_val1,input_val2 ,comando, input_pertence;
  ITEM* novo_item1;
  ITEM* primeiro_item;
- AVL* arvo1 = avl_criar();
+ //AVL* arvo1 = avl_criar();
  conjun* C1= conjun_criar();
 
    ITEM* i1 = item_criar(1);
@@ -37,20 +37,28 @@ int main(){
    ITEM* i2 = item_criar(9);
    ITEM* i4 = item_criar(8);
    ITEM* i5 = item_criar(10);
+    ITEM* i6 = item_criar(8);
+   ITEM* i7 = item_criar(19);
+    ITEM* i8 = item_criar(110);
  //  ITEM* i5 = item_criar(9);
    conjun_add_item(C1,i1);
    conjun_add_item(C1,i2);
    conjun_add_item(C1,i3);
    conjun_add_item(C1,i4);
    conjun_add_item(C1,i5);
+   conjun_add_item(C1,i6);
+   conjun_add_item(C1,i7);
+   conjun_add_item(C1,i8); 
 
 
 
-   avl_inserir(arvo1,i1);
+
+
+  /* avl_inserir(arvo1,i1);
    avl_inserir(arvo1,i2);
    avl_inserir(arvo1,i3);
    avl_inserir(arvo1,i4);
-   avl_inserir(arvo1,i5);
+   avl_inserir(arvo1,i5); */
 
   // avl_inserir(arvo1,i5);
 
@@ -73,7 +81,7 @@ printf("\n\n");
  }
  
   
-  avl_apagar_arvore(&arvo1);
+  //avl_apagar_arvore(&arvo1);
   conjun_apaga(&C1);
   pilha_apagar(&pilha);
  

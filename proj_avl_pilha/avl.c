@@ -206,10 +206,12 @@ NO_ARV* avl_insere_no(NO_ARV* raiz, NO_ARV* novo_no){  //funcao auxiliar que ins
 
 bool avl_inserir(AVL* arvo, ITEM* item){
     if(!arvo){
+        item_apagar(&item);
       printf("arvore nao existe \n"); //msg de erro avisando que a arv n existe
       return false;
     }
     if(avl_busca_item(arvo,item)){
+       item_apagar(&item); //vamos desalocar o item que foi usado para tentar insercao
        printf("esse item ja existe\n");  //msg de erro avisando o user que o elemento ja existe na árvore
        return false;
     } 
@@ -283,12 +285,15 @@ bool avl_remove(AVL*arv, ITEM* item){  //funcao usada pelo user para remover da 
     if(!arv)
       return false;
     if(!avl_busca_item(arv,item)){ //se o item nao existe, a operacao e invalida
+      item_apagar(&item); //vamos desalocar o item que foi usado para tentar remocao
       printf("esse item nao existe \n");
       return false;
     }  
     NO_ARV* nova_raiz = remove_arvo(&(arv->raiz),item);  //nova raiz é retornada da operacao
-    if(!nova_raiz)
+    if(!nova_raiz){
+      item_apagar(&item); //vamos desalocar o item que foi usado para tentar remocao
       return false;
+    }
     else{
         arv->raiz = nova_raiz; //coloca nova raiz
         (arv->num_elem)--; //reduz o numero de elementos da arvore
@@ -341,7 +346,8 @@ int* avl_para_vetor(AVL*arv){ //funcao disponivel para o usuario para extrair os
 
 
 
-/*devido a necessidade de fazer a pilha importar a avl, e o conjunto importar a pilha, para permitir uma travessia pelos elementos da AVL mais eficiente, foi necessario criar
+
+/*devido a necessidade de fazer a pilha importar a avl, e o conjunto importar a pilha, para permitir uma travessia pelos elementos do conjunto implementado com avl mais eficiente, foi necessario criar
 varias funcoes que realizam operacoes basicas como pegar os items, e nos da direita/esque, porem isso foi feito de acordo com os principios de TAD, garantind encapsulamento
 e interoperabilidade entre varios programas*/
 
@@ -361,7 +367,7 @@ NO_ARV* no_avl_pega_dir(NO_ARV* no){
     return no->dir;
 }
 
-NO_ARV* no_avl_pega_esq(NO_ARV* no){
+NO_ARV* no_avl_pega_esq(NO_ARV* no){  //pega dir e esq nao fazem null check por que um no da direita/esque ser null nao e um erro e é utilizado na logica de outras funcoes
     return no->esq;
  }
 

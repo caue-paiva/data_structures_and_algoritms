@@ -129,57 +129,53 @@ void conjun_apaga(conjun** C1){
     *C1 = NULL; //ponteiro fica null
 }
 
-int conjun_tamanho(conjun* C1){ //retorna o tam/num elementos de um conjunto, se ele n for null
+int conjun_tamanho(conjun* C1){ //retorna o tam/num elementos de um conjunto, se ele nao for null
   if(!C1)
     return -1;
   return C1->num_elem;
 }
 
-ITEM* aux_conjunto_retorna_valores(PILHA* pilha_atual, NO_ARV* no_raiz){
+ITEM* aux_conjunto_retorna_valores(PILHA* pilha_atual, NO_ARV* no_raiz){ //funcao auxiliar para retornar os valores do conjunto, um valor a cada chamada da funcao, sem valores repetidos
     static  NO_ARV* no_atual = NULL;
-    static bool desce_esquerda = true;
-    //static NO_ARV* prox_dir;
-    //printf("entrou na func \n");
+    static bool desce_esquerda = true;  //essas variaveis static sao usadas para guardar entre chamadas da funcao o estado atual do percurso (qual no atual e qual acao devemos  fazer)
     
-
-    if(!no_atual){
+    if(!no_atual){                    //essa funcao de pegar valores nao é recursiva, ela implementa lógica de estados persistentes entre chamadas
       no_atual = no_raiz;
     }
 
-    while(desce_esquerda && no_atual){
-      //  printf("desce esq e vdd \n");
-        pilha_push(pilha_atual, no_atual);
-        no_atual =  no_avl_pega_esq(no_atual);
+    while(desce_esquerda && no_atual){ //vai descendo para a esquerda, caso esse seja o comando atual e existam mais nos nessa dire
+        pilha_push(pilha_atual, no_atual);  //vai empilhando todos esses nós no percurso
+        no_atual =  no_avl_pega_esq(no_atual); //vai para a esquerda do no atual
     }
 
-    if(pilha_tam(pilha_atual) > 0){
-      // printf("entrou no pilha tam \n");
-       NO_ARV* no_retorno = pilha_pop(pilha_atual);
+    if(pilha_tam(pilha_atual) > 0){ //se a pilha nao estiver vazia
+       NO_ARV* no_retorno = pilha_pop(pilha_atual);  //o nó a ser retornado é que está no topo da pilha
        
-       if(no_avl_pega_dir(no_retorno)){
-        no_atual =  no_avl_pega_dir(no_retorno);
-        desce_esquerda = true;
-       // printf("indo direita \n");
+       if(no_avl_pega_dir(no_retorno)){  //se tivermos um no a direita do atual, precisamos investigar ele e se possivel, ir ao maximo de sua esquerda
+        no_atual =  no_avl_pega_dir(no_retorno); //o no atual vira o à direita, prox iteracao vamos investigar ele
+        desce_esquerda = true; //precisamos descer na esquerda do novo no à direita
+
        }
-       else{
-        if(pilha_vazia(pilha_atual)){
-         no_atual = NULL;
+       else{ //nao tem filho a direita do no atual, vamos ter que subir e visitar nos ja empilhados
+
+        if(pilha_vazia(pilha_atual)){ //se  nao tem filho direito e a pilha estiver vazia, isso quer dizer que esse e o ultimo no a ser visitado
+         no_atual = NULL; //reseta as variaveis static
          desce_esquerda = true;
-         return retorna_item_no_ARV(no_retorno);
+         return retorna_item_no_ARV(no_retorno); //retorna o ultimo item
         }
         //  printf("voltando subindo \n");
-          no_atual = pilha_topo(pilha_atual);  
-          desce_esquerda = false;
+          no_atual = pilha_topo(pilha_atual);  //caso a pilha n esteja vazia, o no atual é o superior visitado anteriormente, ou seja o topo da pilha
+          desce_esquerda = false; //precisamos disso senao vamos descer para a esquerda denovo, nesse caso oq devemos fazer é subir a arvore
         }
         return retorna_item_no_ARV(no_retorno);
     } 
-    no_atual = NULL;
+    no_atual = NULL; //caso em que a ppilha esta vazia, retorna null e reseta as variaveis static
     desce_esquerda = true;
     return NULL;
 }
 
 
-ITEM* conjunto_retorna_valores(conjun* C1, PILHA* pilha){
+ITEM* conjunto_retorna_valores(conjun* C1, PILHA* pilha){ //funcao para retornar os valores do conjunto, um valor a cada chamada da funcao, sem valores repetidos
       if(!C1){ 
         printf("conjunto nulo");
         exit(1);
