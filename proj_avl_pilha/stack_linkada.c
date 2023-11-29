@@ -2,11 +2,14 @@
 
 
 
-struct no_ {  //essa pilha tem nós 
-   NO* item;
+
+
+
+struct no_ {  //essa pilha contem os nos da lista encad usada para representar pilha e os nos das arvores
+   NO_ARV* item;
    NO_* prox;
-   int teste;
 };
+
 
 struct pilha {
    NO_* topo;
@@ -14,7 +17,7 @@ struct pilha {
 };
 
 
-int pilha_vazia(PILHA*P1){
+bool pilha_vazia(PILHA*P1){
    return (P1->tam == 0);
 }
 
@@ -46,35 +49,22 @@ PILHA* pilha_criar(void){
     
     nova_pilha->topo = NULL;
     nova_pilha->tam =0;
-
-    return nova_pilha;
+    return nova_pilha; 
 }
 
-/*PILHA* pilha_criar_valor(ITEM* item){
-    PILHA* nova_pilha = (PILHA*) malloc(sizeof(PILHA));
-         if(nova_pilha == NULL) { exit(1);}
-    
-    nova_pilha->topo->item = item;
-    nova_pilha->tam =0;
-
-    return nova_pilha;
-}*/
-
-NO_* no_criar(ITEM* item){
+NO_* no_criar(NO_ARV* no_arv){ 
    NO_* N1 = (NO_*) malloc(sizeof(NO_));
      if (!N1) {exit(1);}
-
-   N1->item = item;
+   N1->item = no_arv;
    N1->prox = NULL;
-
    return N1;
 }
 
 
-int pilha_push(PILHA* P1,NO* item){
-   if(!P1){return 0;}
+bool pilha_push(PILHA* P1,NO_ARV* no_arv){
+   if(!P1){return false;}
 
-  // NO_* N1 = no_criar(item);
+   NO_* N1 = no_criar(no_arv);
 
    if(P1->topo){
       N1->prox = P1->topo;
@@ -82,20 +72,23 @@ int pilha_push(PILHA* P1,NO* item){
    } else{
       P1->topo =  N1;
    }
-   ++(P1->tam);
-   return 1; 
+   (P1->tam)++;
+   return true; 
 }
 
-ITEM* pilha_pop(PILHA*P1){
+NO_ARV* pilha_pop(PILHA*P1){
     if(pilha_vazia(P1)){exit(1);}
-
-    NO_* N1= P1->topo;
-    P1->topo =P1->topo->prox;
-    --(P1->tam);
-    return  N1->item;
+    
+    NO_ARV* N1 = P1->topo->item;
+    NO_* topo = P1->topo;
+    P1->topo = P1->topo->prox;
+    free(topo);
+   
+    (P1->tam)--;
+    return  N1;
 }
 
-ITEM* pilha_topo(PILHA* P1){
+NO_ARV* pilha_topo(PILHA* P1){
    if(!P1)
      return NULL;
    
@@ -106,9 +99,9 @@ int pilha_tam(PILHA* P1){
    return (P1->tam);
 }
 
-int lista_encad_apagar(NO_** NO){
+bool lista_encad_apagar(NO_** NO){
    if(!(*NO)){
-      return 0;
+      return false;
    }
 
    NO_* prox;
@@ -116,22 +109,21 @@ int lista_encad_apagar(NO_** NO){
    while(*NO)
    {  
       prox = (*NO)->prox;
-      item_apagar(&(*NO)->item);
+      ITEM* item_temp = retorna_item_no_ARV((*NO)->item);
       free(*NO);
-      (*NO) = prox;
-     
-   } ;
+      (*NO) = prox; 
+   }
    
    *NO = NULL;
-   return 1;
+   return true;
 }
 
-int pilha_apagar(PILHA** P1){
+bool pilha_apagar(PILHA** P1){
     if( !(*P1) )
-      return 0;
+      return false;
    
    lista_encad_apagar( &(*P1)->topo );
    free(*P1);
    *P1 = NULL;
-   return 1;
+   return true;
 }
