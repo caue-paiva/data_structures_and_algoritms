@@ -17,7 +17,6 @@
     void avl_imprime(AVL* arvo);
     bool avl_busca_item(AVL* arv, ITEM* item);
     bool avl_remove(AVL*arv, ITEM* item);
-    int* avl_para_vetor(AVL*arv);
     int avl_num_elem(AVL* arv);
     ITEM* retorna_item_no_ARV(NO_ARV* no);  // daqui para baixo sao funcoes usadas para o conjunto e outros TADs interagirem com os nos/raiz da AVL
     NO_ARV* avl_pega_raiz(AVL* arv);

@@ -319,6 +319,7 @@ int avl_num_elem(AVL* arv){
 //essa funcao extrai os conteudos de um AVL e coloca eles num vetor, esse vetor e usado em operacoes, por ser mais facil de ser manipulado e acessar seus elementos
 //essa funcao realiza apenas uma iteracao sobre todos os elementos da arvore, sendo O(N), eficiente pois temos que mover interagir com N elementos de qualquer jeito
 
+/*
 void vetor_avl_aux(int* vetor, NO_ARV* no_atual, NO_ARV* raiz_da_arvo){ //temos uma variavel para a raiz da arvore para comparacao  e dizer se chegamos no final da volta da recursao
     if(!no_atual || !raiz_da_arvo)
        return;
@@ -342,7 +343,7 @@ int* avl_para_vetor(AVL*arv){ //funcao disponivel para o usuario para extrair os
        return NULL; //essa funcao precisa ser null checada ao ser usada
     vetor_avl_aux(novo_vetor, arv->raiz, arv->raiz); //copia os elementos para esse novo vetor
     return novo_vetor;
-}
+} */
 
 
 
