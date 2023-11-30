@@ -90,6 +90,7 @@ int main(){
       temp_conjun_switch = conjun_criar();
       conjunto_uniao(C1, C2, temp_conjun_switch);    //novo conjunto gerado pela uniao de C1 e C2                     
       conjun_imprime(temp_conjun_switch);
+      printf("tam do novo conjunto : %d \n", conjun_tamanho(temp_conjun_switch));
       conjun_apaga(&temp_conjun_switch); //apagando o novo conjunto que ja foi usado para impressao
    break;
 
@@ -97,6 +98,7 @@ int main(){
       temp_conjun_switch = conjun_criar();
       conjunto_intersec(C1, C2, temp_conjun_switch); //novo conjunto gerado pela intersec de C1 e C2
       conjun_imprime(temp_conjun_switch);
+      printf("tam do novo conjunto : %d \n", conjun_tamanho(temp_conjun_switch));
       conjun_apaga(&temp_conjun_switch); //apagando o novo conjunto que ja foi usado para impressao
    break;
 
