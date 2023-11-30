@@ -108,7 +108,7 @@ int main(){
      else
         printf("erro na remocao \n");
      item_apagar(&temp_item_switch); //apaga o item criado para remocao
-     conjun_imprime(temp_conjun_switch);
+     conjun_imprime(C1);
    break;
 
    case ADICIONAR:

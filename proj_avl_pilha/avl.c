@@ -206,7 +206,7 @@ NO_ARV* avl_insere_no(NO_ARV* raiz, NO_ARV* novo_no){  //funcao auxiliar que ins
 
 bool avl_inserir(AVL* arvo, ITEM* item){
     if(!arvo){
-        item_apagar(&item);
+      item_apagar(&item);
       printf("arvore nao existe \n"); //msg de erro avisando que a arv n existe
       return false;
     }
@@ -250,6 +250,7 @@ NO_ARV* remove_arvo(NO_ARV** raiz, ITEM* item){  //funcao auxiliar que remove um
             (*raiz) = (*raiz)->esq;
         else if (!(*raiz)->esq)
            (*raiz) = ((*raiz)->dir);
+        item_apagar(&temp_no->item);
         free(temp_no);
         temp_no = NULL;
        }else 
@@ -333,7 +334,7 @@ void vetor_avl_aux(int* vetor, NO_ARV* no_atual, NO_ARV* raiz_da_arvo){ //temos 
 
     if(no_atual == raiz_da_arvo) //se ao voltar das chamadas recursivas estivermos na raiz novamente, setamos o index para zero
         index_atual = 0;
-}
+} 
 
 int* avl_para_vetor(AVL*arv){ //funcao disponivel para o usuario para extrair os elementos de uma AVL para um vetor
     if(!arv || ! arv->raiz)

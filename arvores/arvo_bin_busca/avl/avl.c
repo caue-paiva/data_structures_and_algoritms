@@ -247,6 +247,7 @@ NO* remove_arvo(NO** raiz, ITEM* item){  //funcao auxiliar que remove um item da
             (*raiz) = (*raiz)->esq;
         else if (!(*raiz)->esq)
            (*raiz) = ((*raiz)->dir);
+        item_apagar(&temp_no->item);
         free(temp_no);
         temp_no = NULL;
        }else 

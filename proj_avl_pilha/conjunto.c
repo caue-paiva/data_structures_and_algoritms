@@ -32,12 +32,15 @@ conjun* conjun_criar(void){
 
 bool conjun_add_item(conjun * C1, ITEM* item){ //chama a funcao inserir na AVL
     if(!C1){ 
+      printf("falha na add \n");
       return false;
     }
     if(avl_inserir(C1->arvo_elem,item)){ //se a insercao for um sucesso retorna true
         C1->num_elem++;
         return true;
     }
+      printf("falha na add \n");
+
     return false;
 }
 
