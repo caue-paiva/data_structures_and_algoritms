@@ -66,7 +66,7 @@ int main(){
     scanf("%d", &input_val1);
     item_temp_input = item_criar(input_val1);
     if (!conjun_add_item(C2, item_temp_input)){
-      free(item_temp_input);
+       free(item_temp_input);
     }
  }
 

@@ -59,17 +59,15 @@ int main(){
  for (int i = 0; i < tam1; i++) {
     scanf("%d", &input_val1);
     item_temp_input = item_criar(input_val1); //escaneia o input do usuario e cria um item para inserir
-    if (!conjun_add_item(C1, item_temp_input)){
-       item_apagar(&item_temp_input); //caso a insercao falhe, precisamos dar free no item alocado
-    }
+    conjun_add_item(C1, item_temp_input);
+    
  }
 
  for (int i = 0; i < tam2; i++) {  //mesma funcionalidade de acima porem para o segundo conjunto
     scanf("%d", &input_val1);
     item_temp_input = item_criar(input_val1);
-    if (!conjun_add_item(C2, item_temp_input)){
-        item_apagar(&item_temp_input);
-    }
+    conjun_add_item(C2, item_temp_input);
+    
  }
 
  scanf("%d", &temp);//escaneia comando 
@@ -102,7 +100,7 @@ int main(){
       conjun_apaga(&temp_conjun_switch); //apagando o novo conjunto que ja foi usado para impressao
    break;
 
-   case REMOVER:
+   case REMOVER: //memory leak pequeno ao criar items aqui
      scanf("%d", &temp_input_switch);
      temp_item_switch = item_criar(temp_input_switch); //cria item para fazer a remocao
      if(conjun_remove(C1,temp_item_switch))
