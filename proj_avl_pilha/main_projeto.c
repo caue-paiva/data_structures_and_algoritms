@@ -60,14 +60,12 @@ int main(){
     scanf("%d", &input_val1);
     item_temp_input = item_criar(input_val1); //escaneia o input do usuario e cria um item para inserir
     conjun_add_item(C1, item_temp_input);
-    
  }
 
  for (int i = 0; i < tam2; i++) {  //mesma funcionalidade de acima porem para o segundo conjunto
     scanf("%d", &input_val1);
     item_temp_input = item_criar(input_val1);
-    conjun_add_item(C2, item_temp_input);
-    
+    conjun_add_item(C2, item_temp_input);  
  }
 
  scanf("%d", &temp);//escaneia comando 
@@ -118,7 +116,7 @@ int main(){
          item_apagar(&temp_item_switch); //apaga o item que nao foi adicionado
       }else{
           if(!conjun_add_item(C1, temp_item_switch)){
-             printf("falha na insercao");
+             printf("falha na insercao\n");
              item_apagar(&temp_item_switch);
           } //caso em que tentou adicionar mas n deu certo   
       }

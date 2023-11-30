@@ -39,8 +39,6 @@ bool conjun_add_item(conjun * C1, ITEM* item){ //chama a funcao inserir na AVL
         C1->num_elem++;
         return true;
     }
-      printf("falha na add \n");
-
     return false;
 }
 
@@ -156,16 +154,14 @@ ITEM* aux_conjun_retorna_valores(PILHA* pilha_atual, NO_ARV* no_raiz){ //funcao 
        if(no_avl_pega_dir(no_retorno)){  //se tivermos um no a direita do atual, precisamos investigar ele e se possivel, ir ao maximo de sua esquerda
         no_atual =  no_avl_pega_dir(no_retorno); //o no atual vira o à direita, prox iteracao vamos investigar ele
         desce_esquerda = true; //precisamos descer na esquerda do novo no à direita
-
-       }
-       else{ //nao tem filho a direita do no atual, vamos ter que subir e visitar nos ja empilhados
-
+       
+       }else{ //nao tem filho a direita do no atual, vamos ter que subir e visitar nos ja empilhados
+        
         if(pilha_vazia(pilha_atual)){ //se  nao tem filho direito e a pilha estiver vazia, isso quer dizer que esse e o ultimo no a ser visitado
          no_atual = NULL; //reseta as variaveis static
          desce_esquerda = true;
          return retorna_item_no_ARV(no_retorno); //retorna o ultimo item
         }
-        //  printf("voltando subindo \n");
           no_atual = pilha_topo(pilha_atual);  //caso a pilha n esteja vazia, o no atual é o superior visitado anteriormente, ou seja o topo da pilha
           desce_esquerda = false; //precisamos disso senao vamos descer para a esquerda denovo, nesse caso oq devemos fazer é subir a arvore
         }
