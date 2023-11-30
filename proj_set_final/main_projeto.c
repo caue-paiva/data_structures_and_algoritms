@@ -23,17 +23,9 @@ Switch case de pertence, uniao e intersec parece estar funcionando
 
 ////
 A melhorar:
-1) algoritmo para iterar sobre elementos da arvore (se existir um melhor que transformar em vetor)
-
-2) Algoritmo da uniao entre 2 conjuntos, ver como otimizar ele por si so e a questao acima
-
-
 
 ////
 Valgrind/memory leak:
-Testar valgrind e memory leak agora que implementei a funcao de iterar pelos valores da arvore, 
-verificar se nao existe memory leak por causa dessa mudanca
-
 
 ////
 Relatorio:
