@@ -12,6 +12,6 @@
   conjun* conjun_uniao(conjun* C1, conjun* C2);
   void conjun_apaga(conjun** C1);
   int conjun_tamanho(conjun* C1);
-  ITEM* conjunto_retorna_valores(conjun* C1, PILHA* pilha);
+  ITEM* conjun_retorna_valores(conjun* C1, PILHA* pilha);
 
 #endif

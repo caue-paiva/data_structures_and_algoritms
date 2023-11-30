@@ -21,6 +21,7 @@ ITEM *item_criar(int chave){  //aloca um item e retorna ele pro user
           return(NULL);
 }
 
+
 bool item_apagar(ITEM **item){ //apaga o item
    if (*item != NULL){
       free (*item);
@@ -49,3 +50,22 @@ void item_imprimir(ITEM *item){ //imprime o valor de um item
      if (item != NULL)
         printf("\n-->item: %d\n", item->chave);
 }
+
+ITEM* item_copiar(ITEM* item){ //essa funcao copia o conteudo de um item em outro espaco de memoria, usado para criacao de multiplos conjuntos com elementos independentes
+     if(!item){
+       printf("item nulo \n");
+       exit(1);
+     }
+      ITEM *item_novo;    
+      item_novo = (ITEM *) malloc(sizeof(ITEM));
+      if(!item_novo){
+         printf("problemas no item \n");
+         exit(1);
+      }
+      if (item_novo != NULL){
+             item_novo->chave = item->chave;
+             return(item_novo);
+      }
+      return(NULL);
+}
+

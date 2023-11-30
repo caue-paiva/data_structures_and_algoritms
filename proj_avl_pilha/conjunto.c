@@ -62,16 +62,13 @@ conjun* conjun_intersec(conjun* C1,  conjun* C2){
         maior_conjun = C2;
         menor_conjun = C1;
     }
-
-    int* vetor_menor_conjunto = avl_para_vetor(menor_conjun->arvo_elem); //vetor auxiliar para conter os elementos as avl que vao ser usados na opera
-    if(!vetor_menor_conjunto){
-       printf("operecao de intersec invalida \n"); //checar se o vetor retornado n e null
-       exit(1);
-    }
+    PILHA* pilha_menor_conjun = pilha_criar();
+   
     ITEM* item_atual;      
-    //é mais eficiente loopar no menor conjunto e buscar se os seus elementos existem no maior
+    //é mais eficiente iterar pelos elementod do menor conjunto e buscar se os seus elementos existem no maior
     for (int i = 0; i < menor_conjun->num_elem ; i++){
-        item_atual = item_criar(vetor_menor_conjunto[i]);//achar um jeito de "ITERAR" pela AVL e pegar todos elementos
+        item_atual = item_copiar(conjun_retorna_valores(menor_conjun,  pilha_menor_conjun)); 
+        
         if(conjun_pertence(maior_conjun, item_atual)){ //se o numero estiver nos 2 conjuntos, ele sera adicionado na intersec deles
            conjun_add_item(novo_conjunto,item_atual);
            tam_novo_conjun++; //guarda o tamanho do novo conjunto
@@ -80,7 +77,7 @@ conjun* conjun_intersec(conjun* C1,  conjun* C2){
         }
                
     }      
-    free(vetor_menor_conjunto); //libera o vetor aux
+    pilha_apagar(&pilha_menor_conjun); //libera a pilha utilizada no percurso
     novo_conjunto->num_elem = tam_novo_conjun; //coloca o tamanho do novo conjunto
     return novo_conjunto;
 }
@@ -97,26 +94,28 @@ conjun* conjun_uniao(conjun* C1, conjun* C2){
 
     conjun* novo_conjun = conjun_criar(); //aloca uma novo conjunto que vai ser retornado pela opera
 
-    int *vetor1 = avl_para_vetor(C1->arvo_elem); //vetores aux para guardar os valores dos conjuntos e fazer as operacoes
-    int *vetor2 = avl_para_vetor(C2->arvo_elem);
+    PILHA* pilha_prim_conjun =pilha_criar(); //pilha a ser utilizada para copiar os valores do primeiro conjunto
+
     ITEM* novo_item; //item aux para fazer a busca
     int novo_num_elem = C1->num_elem;
 
     for (int i = 0; i < C1->num_elem ; i++){
-      novo_item = item_criar(vetor1[i]);   //coloca todos os items de C1 no novo conjunto
+      novo_item = item_copiar(conjun_retorna_valores(C1,  pilha_prim_conjun));    //coloca todos os items de C1 no novo conjunto
       conjun_add_item(novo_conjun,novo_item);
     }
-    free(vetor1); //libera o primeiro vetor, assim nao tem mais doq um vetor alocado ao mesmo tempo 
+    //libera a primeira pilha, assim nao tem mais doq uma pilha alocada ao mesmo tempo 
+    pilha_apagar(&pilha_prim_conjun);
+    PILHA* pilha_segun_conjun = pilha_criar(); //cria a pilha para usar no segundo conjunto
 
     for (int i = 0; i < C2->num_elem ; i++){
-      novo_item = item_criar(vetor2[i]);
+      novo_item = item_copiar(conjun_retorna_valores(C2,  pilha_segun_conjun));;
       if(!conjun_pertence(novo_conjun, novo_item)){
           conjun_add_item(novo_conjun,novo_item);  //se os elementos de C2 nao forem repetidos, coloca eles tbm
           novo_num_elem++;
       }else
         item_apagar(&novo_item); //apagar o item criado para busca
     }
-    free(vetor2); //libera o segundo vetor
+    pilha_apagar(&pilha_segun_conjun); //libera a pilha usada no percurso
     novo_conjun->num_elem = novo_num_elem; //novo conjun tem um novo num de elementos
     return novo_conjun;
 }
@@ -135,7 +134,7 @@ int conjun_tamanho(conjun* C1){ //retorna o tam/num elementos de um conjunto, se
   return C1->num_elem;
 }
 
-ITEM* aux_conjunto_retorna_valores(PILHA* pilha_atual, NO_ARV* no_raiz){ //funcao auxiliar para retornar os valores do conjunto, um valor a cada chamada da funcao, sem valores repetidos
+ITEM* aux_conjun_retorna_valores(PILHA* pilha_atual, NO_ARV* no_raiz){ //funcao auxiliar para retornar os valores do conjunto, um valor a cada chamada da funcao, sem valores repetidos
     static  NO_ARV* no_atual = NULL;
     static bool desce_esquerda = true;  //essas variaveis static sao usadas para guardar entre chamadas da funcao o estado atual do percurso (qual no atual e qual acao devemos  fazer)
     
@@ -175,10 +174,10 @@ ITEM* aux_conjunto_retorna_valores(PILHA* pilha_atual, NO_ARV* no_raiz){ //funca
 }
 
 
-ITEM* conjunto_retorna_valores(conjun* C1, PILHA* pilha){ //funcao para retornar os valores do conjunto, um valor a cada chamada da funcao, sem valores repetidos
+ITEM* conjun_retorna_valores(conjun* C1, PILHA* pilha){ //funcao para retornar os valores do conjunto, um valor a cada chamada da funcao, sem valores repetidos
       if(!C1){ 
         printf("conjunto nulo");
         exit(1);
-      }
-      return aux_conjunto_retorna_valores(pilha, avl_pega_raiz(C1->arvo_elem));
+      } //retorna o valor da funcao auxiliar de retornar valores
+      return aux_conjun_retorna_valores(pilha, avl_pega_raiz(C1->arvo_elem));
 } 
