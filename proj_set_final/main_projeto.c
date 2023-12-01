@@ -5,7 +5,6 @@ typedef enum {
    UNIAO  = 2,
    INTERSEC = 3,
    REMOVER = 4,
-   ADICIONAR = 5
 } OPERACOES; //enum para as operacoes
 
 
@@ -105,20 +104,6 @@ int main(){
      conjun_imprime(C1);
    break;
 
-   case ADICIONAR:
-      scanf("%d", &temp_input_switch);
-      temp_item_switch = item_criar(temp_input_switch);
-      if(conjun_pertence(C1,temp_item_switch)){ // se o input ja existir no conjun , nao adiciona
-         item_apagar(&temp_item_switch); //apaga o item que nao foi adicionado
-      }else{
-          if(!conjun_add_item(C1, temp_item_switch)){
-             printf("falha na insercao\n");
-             item_apagar(&temp_item_switch);
-          } //caso em que tentou adicionar mas n deu certo   
-      }
-      conjun_imprime(C1);    //imprime o conjunto dps das mudancas (ou o mesmo se nada mudou)
-      break;
-  
    default:
        printf("comando nao suportado \n");
    break;
