@@ -1,14 +1,10 @@
 #ifndef AVL_H
 	#define AVL_H
     #include "item.h"
-    #define FILHO_ESQ 0
-    #define FILHO_DIR 1
 
     typedef struct avl AVL;   
     typedef struct no_arv NO_ARV;
-    /*a struct NO_AVL é declarada na avl, entao a pilha importa ela para guardar esses nós na travessia da AVL
-     e o conjunto.h usa TAD relacionados a esses nós e a AVL para suas operacoes*/
-   
+    
     AVL *avl_criar(void); 
     bool avl_inserir(AVL* arvo, ITEM* item);
     void avl_apagar_arvore(AVL **T);

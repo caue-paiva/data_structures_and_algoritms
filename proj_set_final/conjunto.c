@@ -103,31 +103,37 @@ void conjunto_intersec(conjun* C1, conjun* C2, conjun* novo_conjun){  //funcao p
     aux_percorre_intersec( avl_pega_raiz(menor_conjun->arvo_elem) , maior_conjun, novo_conjun, avl_pega_raiz(menor_conjun->arvo_elem) ); //chama a funcao auxiliar
 }
 
-void aux_percorre_uniao_segundo_conjun(NO_ARV* no_atual, conjun* novo_conjun, const NO_ARV* no_raiz){ 
+
+void aux_percorre_uniao_segundo_conjun(NO_ARV* no_atual, conjun* novo_conjun, const NO_ARV* no_raiz){ //vamos percorrer o segundo conjunto, e caso os elementos dele nao estejam já no novo conjunto, vamos adicionar
     if(!no_atual)
       return;
-    ITEM* item_atual = retorna_item_no_ARV(no_atual);
+    ITEM* item_atual = retorna_item_no_ARV(no_atual); //pega o elemento atual
     ITEM* novo_item;
-    if(!conjun_pertence(novo_conjun,item_atual)){
-       novo_item = item_copiar(item_atual);
+    if(!conjun_pertence(novo_conjun,item_atual)){  //se o elemento atual não estiver no novo conjunto, vamos adicionar ele
+       novo_item = item_copiar(item_atual); //copia em um novo item
        conjun_add_item(novo_conjun, novo_item);
-    }
+    } 
 
-    aux_percorre_uniao_segundo_conjun( no_avl_pega_dir(no_atual) , novo_conjun, no_raiz);
+    aux_percorre_uniao_segundo_conjun( no_avl_pega_dir(no_atual) , novo_conjun, no_raiz); //continua a recursao
     aux_percorre_uniao_segundo_conjun( no_avl_pega_esq(no_atual) , novo_conjun, no_raiz);
 }
 
-void aux_percorre_uniao_primei_conjun(NO_ARV* no_atual,conjun* novo_conjun){
+void aux_percorre_uniao_primei_conjun(NO_ARV* no_atual,conjun* novo_conjun){ //vamos percorrer o primeiro conjunto (Maior) e colocar todos os seus elementos no novo conjunto de uniao
     if(!no_atual)
       return;
-    ITEM* item_atual = retorna_item_no_ARV(no_atual);
-    ITEM* novo_item = item_copiar(item_atual);
-    conjun_add_item(novo_conjun, novo_item);
+    ITEM* item_atual = retorna_item_no_ARV(no_atual); //pega o item atual do primeiro conjunto
+    ITEM* novo_item = item_copiar(item_atual); // copia o valor num novo item
+    conjun_add_item(novo_conjun, novo_item); //add no novo conjunto
 
-    aux_percorre_uniao_primei_conjun( no_avl_pega_dir(no_atual) , novo_conjun);
+    aux_percorre_uniao_primei_conjun( no_avl_pega_dir(no_atual) , novo_conjun); //continua a recursao
     aux_percorre_uniao_primei_conjun( no_avl_pega_esq(no_atual) , novo_conjun);
 }
 
+/* Seja N = tam do maior conjunto e n o tamanho do menor conjun entre os 2 da operação de uniao:  como escolhemos o maior conjunto como o primeiro a ser copiado, a uniao vai realizar primeiro N operações (copiar o maior)
+depois vamos percorrer o menor n vezes, cada uma realizando uma busca no novo_conjunto ( msm qntd de elementos que o maior) isso fica log(N)
+
+entao a complexidade fica: N + n*log(N) = O(n*log(N)). Escolher copiar os valores do maior primeiro é benéfico, pois:   n*log(N) < N*log(n)  (mais sobre isso no relatorio)
+*/
 void conjunto_uniao(conjun* C1, conjun* C2, conjun* novo_conjun){ //funcao para colocar a uniao de C1 e C2 em um terceiro conjunto
     if( !C1 || !C2 ){
       printf("conjuntos vazio\n"); //se C1 ou C2 forem nulos, a operacao e cancelada

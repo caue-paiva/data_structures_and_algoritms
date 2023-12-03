@@ -3,6 +3,7 @@
   #include "avl.h"
 
   typedef struct conjun_ conjun;
+  
   bool conjun_remove(conjun* C1, ITEM* item);
   bool conjun_pertence(conjun * C1, ITEM* item);
   conjun* conjun_criar(void);
@@ -10,7 +11,7 @@
   void conjun_imprime(conjun* C1);
   void conjun_apaga(conjun** C1);
   int conjun_tamanho(conjun* C1);
-  //ITEM* conjun_retorna_valores(conjun* C1, PILHA* pilha);
   void conjunto_intersec(conjun* C1, conjun* C2, conjun* novo_conjun);  
   void conjunto_uniao(conjun* C1, conjun* C2, conjun* novo_conjun); 
+
 #endif

@@ -317,44 +317,14 @@ int avl_num_elem(AVL* arv){
     return arv->num_elem; //retorna o num de elementos na arvore
 }
 
-//essa funcao extrai os conteudos de um AVL e coloca eles num vetor, esse vetor e usado em operacoes, por ser mais facil de ser manipulado e acessar seus elementos
-//essa funcao realiza apenas uma iteracao sobre todos os elementos da arvore, sendo O(N), eficiente pois temos que mover interagir com N elementos de qualquer jeito
-
-/*
-void vetor_avl_aux(int* vetor, NO_ARV* no_atual, NO_ARV* raiz_da_arvo){ //temos uma variavel para a raiz da arvore para comparacao  e dizer se chegamos no final da volta da recursao
-    if(!no_atual || !raiz_da_arvo)
-       return;
-    static int index_atual = 0; //essa variavel static mantem conta de qual index do vetor vamos inserir cada elemento
-    int elemento_arvore = item_get_chave(no_atual->item);
-    vetor[index_atual] = elemento_arvore;
-    index_atual++; //insere o elemento no index e incrementa ele
-
-    vetor_avl_aux(vetor, no_atual->dir, raiz_da_arvo);
-    vetor_avl_aux(vetor, no_atual->esq, raiz_da_arvo);
-
-    if(no_atual == raiz_da_arvo) //se ao voltar das chamadas recursivas estivermos na raiz novamente, setamos o index para zero
-        index_atual = 0;
-} 
-
-int* avl_para_vetor(AVL*arv){ //funcao disponivel para o usuario para extrair os elementos de uma AVL para um vetor
-    if(!arv || ! arv->raiz)
-       return NULL;
-    int* novo_vetor = (int*) malloc (sizeof(int) * (arv->num_elem)); //aloca um novo vetor de N elementos
-    if(!novo_vetor)
-       return NULL; //essa funcao precisa ser null checada ao ser usada
-    vetor_avl_aux(novo_vetor, arv->raiz, arv->raiz); //copia os elementos para esse novo vetor
-    return novo_vetor;
-} */
 
 
 
 
-/*devido a necessidade de fazer a pilha importar a avl, e o conjunto importar a pilha, para permitir uma travessia pelos elementos do conjunto implementado com avl mais eficiente, foi necessario criar
-varias funcoes que realizam operacoes basicas como pegar os items, e nos da direita/esque, porem isso foi feito de acordo com os principios de TAD, garantind encapsulamento
-e interoperabilidade entre varios programas*/
+/*funcoes para permitir outros TADs pegarem valores da AVL e de seus componentes*/
 
 
-ITEM* retorna_item_no_ARV(NO_ARV* no){  //funcoes necessarias para a pilha interagir com os nos das arvores
+ITEM* retorna_item_no_ARV(NO_ARV* no){  //funcoes necessarias para o conjunto interagir com os nos das arvores
     if(!no)
        exit(1);
     return no->item;
