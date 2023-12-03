@@ -9,7 +9,7 @@ struct no_arv {
     int altura;
 };
 
-
+ 
 struct avl{
     NO_ARV *raiz;
     int profundidade;  //struct avl com a raiz, num de elementos e profundidade

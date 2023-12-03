@@ -12,14 +12,6 @@ typedef enum {
 /*
 Operacoes testadas ate agora 27/11/2023: 
 
-Criar conjun: um pouco de teste, funciona bem
-Add conjun: bastante teste, parece que funciona bem
-remover e pertence: um pouco de teste, funciona bem
-conjunto uniao: Um pouco de teste, parece funcionar bem
-conjunto intersec: testei um pouco, ta funcionando ok dps de eu colocar um check de um deles ser vazio
-
-Switch case de pertence, uniao e intersec parece estar funcionando
-
 ////
 A melhorar:
 

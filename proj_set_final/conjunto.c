@@ -28,7 +28,7 @@ conjun* conjun_criar(void){
     novo_conjun->num_elem = 0;
     novo_conjun->arvo_elem = avl_criar(); //cria uma AVL associada a esse conjunto
     return novo_conjun;
-} 
+}  
 
 bool conjun_add_item(conjun * C1, ITEM* item){ //chama a funcao inserir na AVL
     if(!C1){ 
