@@ -23,10 +23,6 @@ Relatorio:
 Colocar a prova da nossa solucao da func intersec ser mais eficiente (colcoar grafico do geogebra se puder)
 Justificativa do por que usar AVL
 
-Coloca a funcao de iterar pelos valores da arvore ser eficiente em memoria e em tempo de execucao
-
-Justificar por que usar item ao inves de fazer busca direta pelo INT (flexibilidade para poder mudar o tipo de dado se precisa e encapsulamento)
-
 */
 
 int main(){
@@ -88,11 +84,10 @@ int main(){
    case REMOVER: //memory leak pequeno ao criar items aqui
      scanf("%d", &temp_input_switch);
      temp_item_switch = item_criar(temp_input_switch); //cria item para fazer a remocao
-     if(conjun_remove(C1,temp_item_switch))
+     if(conjun_remove(C1,temp_item_switch)) //caso o item ja exista, a operacao deleta o item alocado
         printf("removido com sucesso \n"); //ve se a op teve sucesso
      else
         printf("erro na remocao \n");
-     item_apagar(&temp_item_switch); //apaga o item criado para remocao
      conjun_imprime(C1);
    break;
 

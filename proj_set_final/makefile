@@ -1,6 +1,9 @@
 all: avl.o conjunto.o main_projeto.o item.o 
 	gcc -g -o main_projeto avl.o conjunto.o main_projeto.o item.o  
 
+run: 
+	./main_projeto
+
 avl.o: avl.c avl.h item.h 
 	gcc -g -c  avl.c
 

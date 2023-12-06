@@ -299,6 +299,7 @@ bool avl_remove(AVL*arv, ITEM* item){  //funcao usada pelo user para remover da 
         arv->raiz = nova_raiz; //coloca nova raiz
         (arv->num_elem)--; //reduz o numero de elementos da arvore
         arv->profundidade = max( avl_altura_no(nova_raiz->dir), avl_altura_no(nova_raiz->esq ) )+1; //muda a profudidade da arvore
+        item_apagar(&item); 
         return true;
     }
 }
