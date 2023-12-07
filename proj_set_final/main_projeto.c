@@ -8,23 +8,6 @@ typedef enum {
 } OPERACOES; //enum para as operacoes
 
 
-
-/*
-Operacoes testadas ate agora 27/11/2023: 
-
-////
-A melhorar:
-
-////
-Valgrind/memory leak:
-
-////
-Relatorio:
-Colocar a prova da nossa solucao da func intersec ser mais eficiente (colcoar grafico do geogebra se puder)
-Justificativa do por que usar AVL
-
-*/
-
 int main(){
  
  int tam1, tam2, input_val1,temp;
