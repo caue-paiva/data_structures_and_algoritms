@@ -8,9 +8,13 @@ typedef enum {
 } OPERACOES; //enum para as operacoes
 
 
-/* Esse código se comporta como o exemplo dado no PDF do trabalho, ou seja, ele realiza apenas uma operação (ditada pelo user) por chamada
+/* 
+Trabalho feito por:
 
+Cauê Paiva Lira (NUSP: 14675416)
+Thales Sena de Queiroz (NUSP: 14608873)
 
+Esse código se comporta como o exemplo dado no PDF do trabalho, ou seja, ele realiza apenas uma operação (ditada pelo user) por chamada
 */
 
 int main(){
