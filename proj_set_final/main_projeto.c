@@ -8,6 +8,11 @@ typedef enum {
 } OPERACOES; //enum para as operacoes
 
 
+/* Esse código se comporta como o exemplo dado no PDF do trabalho, ou seja, ele realiza apenas uma operação (ditada pelo user) por chamada
+
+
+*/
+
 int main(){
  
  int tam1, tam2, input_val1,temp;
